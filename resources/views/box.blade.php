@@ -31,23 +31,25 @@
                         <th>Locataire actuel</th>
                         <th>Action</th>
                     </tr>
-                    <form>
+                    <form action="{{ route('box.store') }}" method="POST">
+                        @csrf
                         <tr>
                             <td></td>
                             <td>
-                                <input type="url">
+                                <input type="url" name="img_url">
                             </td>
                             <td>
-                                <input type="text" required>
+                                <input type="text" name="address" required>
                             </td>
                             <td>
-                                <input type="number">
+                                <input type="number" name="price" required>
                             </td>
                             <td>
-                                <input type="text">
+                                <input type="text" name="tenant_id">
                             </td>
                             <td>
-                                <input type="sumbmit" value="enregistrer">
+                                <input type="submit" value="enregistrer">
+                                <input type="hidden" name="owner_id" value="{{ Auth::user()->id}}"">
                             </td>
                         </tr>
                     </form>
@@ -56,7 +58,7 @@
                         <td>{{$box->id}}</td>
                         <td><img src="{{$box->img_url}}" width="80px" height="80px"> </td>
                         <td>{{$box->address}}</td>
-                        <td>{{$box->price}}</td>
+                        <td>{{$box->price}}€    </td>
                         <td></td>
                         <td>
                             <button>Modifier</button>
