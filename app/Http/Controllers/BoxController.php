@@ -9,6 +9,6 @@ use Illuminate\Http\Request;
 class BoxController extends Controller
 {
     public function index(){
-        dd(Box::all());
+        return view('box', ['boxes'=>Box::all()]);
     }
 }
