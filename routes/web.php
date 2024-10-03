@@ -7,9 +7,14 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('box/{id}', [BoxController::class, 'show'])->middleware(['auth', 'verified'])->name('box.show');
-Route::post('/box', [BoxController::class, 'store'])->name('box.store');
-Route::delete('/box/{id}/{owner_id}', [BoxController::class, 'destroy'])->name('box.destroy');
+
+Route::group(['prefix' => 'box'], function () {
+    Route::get('{owner_id}', [BoxController::class, 'show'])->middleware(['auth', 'verified'])->name('box.show');
+    Route::get('edit/{id}', [BoxController::class, 'edit'])->middleware(['auth', 'verified'])->name('box.edit');
+    Route::post('', [BoxController::class, 'store'])->name('box.store');
+    Route::delete('{id}/{owner_id}', [BoxController::class, 'destroy'])->name('box.destroy');
+    Route::put('{id}/{owner_id}', [BoxController::class, 'update'])->name('box.update');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

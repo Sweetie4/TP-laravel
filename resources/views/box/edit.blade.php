@@ -31,49 +31,29 @@
                         <th>Locataire actuel</th>
                         <th>Action</th>
                     </tr>
-                    <form action="{{ route('box.store') }}" method="POST">
+                    <form action="{{ route('box.update',[$box->id, $box->owner_id]) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <tr>
                             <td></td>
                             <td>
-                                <input type="url" name="img_url">
+                                <input type="url" value="{{$box->img_url}}" name="img_url">
                             </td>
                             <td>
-                                <input type="text" name="address" required>
+                                <textarea type="text"  name="address" required>{{$box->address}}</textarea>
                             </td>
                             <td>
-                                <input type="number" name="price" required>
+                                <input type="number" value="{{$box->price}}" name="price" required>
                             </td>
                             <td>
-                                <input type="text" name="tenant_id">
+                                <input type="text" value="{{$box->tenant_id}}" name="tenant_id">
                             </td>
                             <td>
-                                <input type="submit" value="enregistrer">
+                                <input type="submit" value="Enregistrer">
                                 <input type="hidden" name="owner_id" value="{{ Auth::user()->id}}"">
                             </td>
                         </tr>
                     </form>
-                    @foreach ($boxes as $box)
-                    <tr>
-                        <td>{{$box->id}}</td>
-                        <td><img src="{{$box->img_url}}" width="80px" height="80px"> </td>
-                        <td>{{$box->address}}</td>
-                        <td>{{$box->price}}€ </td>
-                        <td></td>
-                        <td>
-                            {{-- <form action="{{ route('blog.destroy', $blog->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Modifier</button>
-                        </form> --}}
-                        <form action="{{ route('box.destroy', [$box->id, $box->owner_id]) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Supprimer</button>
-                        </form>
-                        </td>
-                    </tr>
-                    @endforeach
                 </table>
             </div>
         </div>

@@ -8,8 +8,12 @@ use Illuminate\Http\Request;
 
 class BoxController extends Controller
 {
-    public function show($id){
-        return view('box', ['boxes'=>Box::where('owner_id',$id)->get()]);
+    public function show($owner_id){
+        return view('box.box', ['boxes'=>Box::where('owner_id',$owner_id)->get()]);
+    }
+
+    public function edit($id){
+        return view('box.edit', ['box'=>Box::find($id)]);
     }
 
     public function store(Request $request)
@@ -21,6 +25,12 @@ class BoxController extends Controller
     public function destroy(Request $request, $id, $owner_id)
     {
         Box::destroy($id);
+
+        return redirect()->route('box.show',$owner_id);
+    }
+    public function update(Request $request, $id, $owner_id)
+    {
+        Box::find($id)->update(['price'=> $request->get('price'), 'address'=>$request->get('address'), 'img_url'=>$request->get('img_url')]);
 
         return redirect()->route('box.show',$owner_id);
     }
