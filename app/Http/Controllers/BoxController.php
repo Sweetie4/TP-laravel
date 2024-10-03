@@ -17,4 +17,11 @@ class BoxController extends Controller
         Box::insert([ 'owner_id'=> $request->get('owner_id'),'price'=> $request->get('price'), 'address'=>$request->get('address'), 'img_url'=>$request->get('img_url')]);
         return redirect()->route('box.show',$request->get('owner_id'));
     }
+
+    public function destroy(Request $request, $id, $owner_id)
+    {
+        Box::destroy($id);
+
+        return redirect()->route('box.show',$owner_id);
+    }
 }

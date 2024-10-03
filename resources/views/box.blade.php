@@ -58,11 +58,19 @@
                         <td>{{$box->id}}</td>
                         <td><img src="{{$box->img_url}}" width="80px" height="80px"> </td>
                         <td>{{$box->address}}</td>
-                        <td>{{$box->price}}€    </td>
+                        <td>{{$box->price}}€ </td>
                         <td></td>
                         <td>
-                            <button>Modifier</button>
-                            <button>Supprimer</button>
+                            {{-- <form action="{{ route('blog.destroy', $blog->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Modifier</button>
+                        </form> --}}
+                        <form action="{{ route('box.destroy', [$box->id, $box->owner_id]) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Supprimer</button>
+                        </form>
                         </td>
                     </tr>
                     @endforeach
