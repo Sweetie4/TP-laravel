@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class BoxController extends Controller
 {
-    public function index(){
-        return view('box', ['boxes'=>Box::all()]);
+    public function show($id){
+        return view('box', ['boxes'=>Box::where('owner_id',$id)->get()]);
     }
 }
