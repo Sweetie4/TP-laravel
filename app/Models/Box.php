@@ -14,6 +14,8 @@ class Box extends Model
 
     protected $fillable =[
         'owner_id',
+        'address',
+        'img_url',
         'price'
     ];
 }

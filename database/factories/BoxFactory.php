@@ -20,6 +20,8 @@ class BoxFactory extends Factory
         $userIDs = User::pluck('id');
         return [
             'owner_id'=> fake()->randomElement($userIDs),
+            'img_url'=>'https://gilbert.paris/wp-content/uploads/2021/04/location-box-stockage-.jpg',
+            'address'=>fake()->address(),
             'price'=> 120
         ];
     }
