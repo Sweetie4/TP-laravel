@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\ModelContract;
 use Illuminate\Http\Request;
 
 class ModelContractController extends Controller
@@ -10,24 +11,20 @@ class ModelContractController extends Controller
     // Create
 
     public function store(Request $request){
-    //    Tenant::updateOrInsert(['email'=>$request->get('email')],[
-    //     'first_name'=>$request->get('first_name'),
-    //     'last_name'=>$request->get('last_name'),
-    //     'phone'=>$request->get('phone'),
-    //     'email'=>$request->get('email'),
-    //     'address'=>$request->get('address'),
-    //     'bank_account'=>$request->get('bank_account'),
-    //     'box_id'=>$request->get('box')
-    // ]);
-    //     return  redirect()->route('tenant.show',$request->get('owner_id'));
+        ModelContract::insert([
+            'name'=>$request->get('name'),
+            'content'=>$request->get('content'),
+            'landlord_id'=>$request->get('owner_id'),
+        ]);
+        return redirect()->route('model-contracts.show',$request->get('owner_id'));
     }
 
     // Read
 
     public function show($owner_id){
-        // $boxes = Box::where('owner_id',$owner_id)->with('tenant')->get();
+        $models = ModelContract::where('landlord_id',$owner_id)->get();
         return view('contract.model.list', 
-        // ['tenants'=>$boxes]
+        ['models'=>$models]
     );
     }
 
