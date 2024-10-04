@@ -32,6 +32,16 @@ class ContratController extends Controller
         }else {
             dd('error');
         }
-        // return view('contract.model.list',['models'=>$models]);
+    }
+
+    public function store(Request $request ){
+        $model = ModelContract::where('id',$request->get('model'))->first();
+        $exploded_model = explode("#", $model->content);
+        foreach($array as $key => $value) {
+            if($key%2 == 0) 
+            continue;
+        }
+        dd('fifsh');
+        return view('dashboard');
     }
 }

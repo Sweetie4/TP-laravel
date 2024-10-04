@@ -64,26 +64,27 @@
         <div class="py-12">
             <div class=" mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <form action="{{ route('model-contracts.store') }}" method="POST">
+                    <form action="{{ route('contracts.store') }}" method="POST">
                         <h2>Créer un modèle</h2>
                         @csrf
                         <div class="form-group">
                             @if ($box[0])
-                                <select>
+                                <select name="box">
                                     @foreach($box as $b)
                                     <option value="{{$b->id}}">{{$b->address}}</option>
                                     @endforeach
                                 </select>
                             @else
                                 
-                            <select disabled>
+                            <select disabled="disabled" >
                                 <option selected="selected" value="{{$box->id}}">{{$box->address}}</option>
                             </select>
+                            <input name="box" type="hidden" value="{{$box->id}}">
                             @endif
                         </div>
                         <div class="form-group">
                             @if ($tenant[0])
-                                <select>
+                                <select name="tenant">
                                     @foreach($tenant as $box)
                                     @if($box->tenant)
                                     <option value="{{$box->tenant->id}}">{{$box->tenant->first_name}} {{$box->tenant->last_name}}</option>
@@ -91,22 +92,24 @@
                                     @endforeach
                                 </select>
                             @else
-                            <select disabled>
+                            <select disabled >
                                 <option selected="selected" value="{{$tenant->id}}">{{$tenant->first_name}} {{$tenant->last_name}}</option>
                             </select>
+                            <input name="tenant" type="hidden" value="{{$tenant->id}}">
                             @endif
                         </div>
                         <div class="form-group">
                             @if ($model[0])
-                                <select>
+                                <select name="model">
                                     @foreach($model as $contract)
                                     <option value="{{$contract->id}}">{{$contract->name}}</option>
                                     @endforeach
                                 </select>
                             @else
-                            <select disabled>
+                            <select disabled >
                                 <option selected="selected" value="{{$model->id}}">{{$model->name}}</option>
                             </select>
+                            <input name="model" type="hidden" value="{{$model->id}}">
                             @endif
                         </div>
     

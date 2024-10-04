@@ -37,6 +37,7 @@ Route::group(['prefix' => 'contracts'], function () {
         Route::put('{id}/{owner_id}', [ModelContractController::class, 'update'])->name('model-contracts.update');
     });
     Route::get('{type}/{id}/{logged_id}', [ContratController::class, 'create'])->middleware(['auth', 'verified'])->name('contrats.create');
+    Route::post('', [ContratController::class, 'store'])->middleware(['auth', 'verified'])->name('contracts.store');
 });
 
 Route::middleware('auth')->group(function () {
