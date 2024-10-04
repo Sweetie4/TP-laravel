@@ -10,6 +10,12 @@
     text-align: left;
     padding: 8px;
   }
+  .links{
+    color : rgb(27, 98, 229);
+  }
+  .links:hover{
+    color : rgb(0, 0, 0);
+  }
 
 </style>
 <x-app-layout>
@@ -45,10 +51,9 @@
                                 <input type="number" name="price" required>
                             </td>
                             <td>
-                                <input type="text" name="tenant_id">
                             </td>
                             <td>
-                                <input type="submit" value="Enregistrer">
+                                <input class="links" type="submit" value="Enregistrer">
                                 <input type="hidden" name="owner_id" value="{{ Auth::user()->id}}"">
                             </td>
                         </tr>
@@ -59,14 +64,18 @@
                         <td><img src="{{$box->img_url}}" width="80px" height="80px"> </td>
                         <td>{{$box->address}}</td>
                         <td>{{$box->price}}€ </td>
-                        <td></td>
+                        @if ($box->tenant)
+                            <td><a class="links" href="{{ route('tenant.edit', $box->tenant->id) }}">{{$box->tenant->first_name}} {{$box->tenant->last_name}}</a></td>
+                        @else
+                            <td></td>
+                        @endif
                         <td>
-                            <a href="{{ route('box.edit', $box->id) }}">Modifier</a>
-                        <form action="{{ route('box.destroy', [$box->id, $box->owner_id]) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Supprimer</button>
-                        </form>
+                            <a class="links" href="{{ route('box.edit', $box->id) }}">Modifier</a>
+                            <form action="{{ route('box.destroy', [$box->id, $box->owner_id]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="links" type="submit">Supprimer</button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
