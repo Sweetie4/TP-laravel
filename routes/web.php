@@ -6,9 +6,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TenantController;
 use Illuminate\Support\Facades\Route;
 
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::group(['prefix' => 'box'], function () {
     Route::get('{owner_id}', [BoxController::class, 'show'])->middleware(['auth', 'verified'])->name('box.show');
     Route::get('edit/{id}', [BoxController::class, 'edit'])->middleware(['auth', 'verified'])->name('box.edit');
