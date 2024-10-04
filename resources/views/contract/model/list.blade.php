@@ -9,13 +9,9 @@ td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
-}
 
 input{
-    width: 100%
-}
-select{
-    text-overflow: ellipsis;
+    width: 100%;
 }
 .links{
     color : rgb(27, 98, 229);
@@ -25,8 +21,6 @@ select{
 }
 
 .contract{
-    max-height: 50px;
-    text-overflow: ellipsis;
     white-space: pre-wrap;
 }
 
@@ -63,7 +57,7 @@ ul {
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Locataires') }}
+            {{ __('Modèles de contrat') }}
         </h2>
     </x-slot>
     <div class="py-12">
