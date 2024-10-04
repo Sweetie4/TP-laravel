@@ -31,37 +31,27 @@ class ModelContractController extends Controller
     // Update
 
     public function update(Request $request, $id,$owner_id){
-    //     Tenant::find($id)->update([   
-    //         'first_name'=>$request->get('first_name'),
-    //         'last_name'=>$request->get('last_name'),
-    //         'phone'=>$request->get('phone'),
-    //         'email'=>$request->get('email'),
-    //         'address'=>$request->get('address'),
-    //         'bank_account'=>$request->get('bank_account'),
-    //         'box_id'=>$request->get('box')
-    // ]);
+        ModelContract::find($id)->update([   
+            'name'=>$request->get('name'),
+            'content'=>$request->get('content')
+    ]);
 
 
-    //     return redirect()->route('tenant.show',$owner_id);
+        return redirect()->route('model-contracts.show',$owner_id);
     }
 
     public function edit($id){
-        // $tenant=Tenant::find($id);
-        // $box=Box::find($tenant->box_id);        
-        // $boxes = Box::where('owner_id',$box->owner_id)->with('tenant')->get();
-        // return view('tenant.edit', [
-        //     'tenant'=>$tenant, 
-        //     'tenant_box'=>$box,
-        //     'boxes'=>$boxes
-        // ]);
+        return view('contract.model.edit', [
+            'model'=>ModelContract::find($id), 
+        ]);
     }
 
     // Delete
 
     public function destroy(Request $request, $id, $owner_id)
     {
-        // Tenant::destroy($id);
+        ModelContract::destroy($id);
 
-        // return redirect()->route('tenant.show',$owner_id);
+        return redirect()->route('model-contracts.show',$owner_id);
     }
 }
