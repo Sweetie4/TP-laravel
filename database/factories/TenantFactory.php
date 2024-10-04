@@ -19,13 +19,13 @@ class TenantFactory extends Factory
     {
         $boxIDs = Box::pluck('id');
         return [
-           'box_id' => fake()->randomElement($boxIDs),
-           'first_name'=> fake()->firstName(),
-           'last_name' => fake()->lastName(),
-           'phone' =>fake()->phoneNumber(),
-           'email'=> fake()->unique()->safeEmail(),
-           'address'=>fake()->address(),
-           'bank_account'=>000000000000000
+            'box_id' => fake()->randomElement($boxIDs),
+            'first_name'=> fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'phone' =>fake()->phoneNumber(),
+            'email'=> fake()->unique()->safeEmail(),
+            'address'=>fake()->address(),
+            'bank_account'=>000000000000000
         ];
     }
 }
