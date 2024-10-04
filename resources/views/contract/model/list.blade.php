@@ -109,6 +109,7 @@ ul {
                         <td>{{$model->name}}</td>
                         <td class="contract">{{$model->content}}</td>
                         <td>
+                            <a class="links" href="{{ route('contrats.show', ['contract', $model->id]) }}">Générer un contrat</a>
                             <a href="{{ route('model-contracts.edit', $model->id) }}" class="links" >Modifier</a>
                             <form action="{{ route('model-contracts.destroy', [$model->id, $model->landlord_id]) }}" method="POST">
                                 @csrf

@@ -27,12 +27,15 @@ Route::group(['prefix' => 'tenant'], function () {
 
 
 
-Route::group(['prefix' => 'model-contracts'], function () {
-    Route::get('{owner_id}', [ModelContractController::class, 'show'])->middleware(['auth', 'verified'])->name('model-contracts.show');
-    Route::get('edit/{id}', [ModelContractController::class, 'edit'])->middleware(['auth', 'verified'])->name('model-contracts.edit');
-    Route::post('', [ModelContractController::class, 'store'])->name('model-contracts.store');
-    Route::delete('{id}/{owner_id}', [ModelContractController::class, 'destroy'])->name('model-contracts.destroy');
-    Route::put('{id}/{owner_id}', [ModelContractController::class, 'update'])->name('model-contracts.update');
+Route::group(['prefix' => 'contracts'], function () {
+    Route::group(['prefix' => 'models'], function () {
+        Route::get('{owner_id}', [ModelContractController::class, 'show'])->middleware(['auth', 'verified'])->name('model-contracts.show');
+        Route::get('edit/{id}', [ModelContractController::class, 'edit'])->middleware(['auth', 'verified'])->name('model-contracts.edit');
+        Route::post('', [ModelContractController::class, 'store'])->name('model-contracts.store');
+        Route::delete('{id}/{owner_id}', [ModelContractController::class, 'destroy'])->name('model-contracts.destroy');
+        Route::put('{id}/{owner_id}', [ModelContractController::class, 'update'])->name('model-contracts.update');
+    });
+    Route::get('{type}/{id}', function(){dd('test');})->middleware(['auth', 'verified'])->name('contrats.show');
 });
 
 Route::middleware('auth')->group(function () {

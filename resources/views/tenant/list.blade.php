@@ -100,6 +100,7 @@
                         <td>{{$tenant->tenant->bank_account}}</td>
                         <td><a  href="{{ route('box.edit', $tenant->id) }}" class="links" >{{$tenant->address}}</a> </td>
                         <td>
+                            <a class="links" href="{{ route('contrats.show', ['tenant', $tenant->tenant->id]) }}">Générer un contrat</a><br>
                             <a href="{{ route('tenant.edit', $tenant->tenant->id) }}" class="links" >Modifier</a>
                             <form action="{{ route('tenant.destroy', [$tenant->tenant->id, $tenant->owner_id]) }}" method="POST">
                                 @csrf
