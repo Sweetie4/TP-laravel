@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ContractController extends Controller
+class ModelContractController extends Controller
 {
     // Create
 
@@ -24,10 +24,12 @@ class ContractController extends Controller
 
     // Read
 
-    // public function show($owner_id){
-    //     $boxes = Box::where('owner_id',$owner_id)->with('tenant')->get();
-    //     return view('tenant.list', ['tenants'=>$boxes]);
-    // }
+    public function show($owner_id){
+        // $boxes = Box::where('owner_id',$owner_id)->with('tenant')->get();
+        return view('contract.model.list', 
+        // ['tenants'=>$boxes]
+    );
+    }
 
     // Update
 
