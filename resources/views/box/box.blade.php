@@ -71,11 +71,11 @@
                         @endif
                         <td>
                             <a class="links" href="{{ route('box.edit', $box->id) }}">Modifier</a>
-                        <form action="{{ route('box.destroy', [$box->id, $box->owner_id]) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="links" type="submit">Supprimer</button>
-                        </form>
+                            <form action="{{ route('box.destroy', [$box->id, $box->owner_id]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="links" type="submit">Supprimer</button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach

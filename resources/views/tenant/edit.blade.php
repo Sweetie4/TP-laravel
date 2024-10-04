@@ -1,3 +1,4 @@
+
 <style>
     table {
     font-family: arial, sans-serif;
@@ -10,14 +11,6 @@
     text-align: left;
     padding: 8px;
   }
-
-  input{
-    width: 100%
-  }
-   select{
-    text-overflow: ellipsis;
-  }
-
   .links{
     color : rgb(27, 98, 229);
   }
@@ -25,9 +18,12 @@
   .links:hover{
     color : rgb(0, 0, 0);
   }
-.box_address{
+  .box_address{
     max-width: 219px;
 }
+input{
+    width: 100%
+  }
 </style>
 <x-app-layout>
     <x-slot name="header">
@@ -36,9 +32,8 @@
         </h2>
     </x-slot>
     <div class="py-12">
-        <div class=" mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                
                 <table>
                     <tr>
                         <th>#</th>
@@ -51,33 +46,36 @@
                         <th>Box</th>
                         <th>Action</th>
                     </tr>
-                    <form action="{{ route('tenant.store') }}" method="POST">
+                    <form action="{{ route('tenant.update', [$tenant->id, $tenant_box->owner_id]) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <tr>
                             <td></td>
                             <td>
-                                <input type="text" name="first_name" required>
+                                <input type="text" value="{{$tenant->first_name}}" name="first_name">
                             </td>
                             <td>
-                                <input type="text" name="last_name" required>
+                                <input type="text" value="{{$tenant->last_name}}" name="last_name">
                             </td>
                             <td>
-                                <input type="number" name="phone" required>
+                                <input type="number" value="{{$tenant->phone}}" name="phone" required>
                             </td>
                             <td>
-                                <input type="text" name="email" required>
+                                <input type="text" value="{{$tenant->email}}" name="email">
                             </td>
                             <td>
-                                <input type="text" name="address" required>
+                                <textarea type="text"  name="address" required>{{$tenant->address}}</textarea>
                             </td>
                             <td>
-                                <input type="text" name="bank_account" required>
+                                <input type="text" name="bank_account" value="{{$tenant->bank_account}}" required>
                             </td>
                             <td>
                                 <select name="box" class="box_address" required>
-                                    @foreach ($tenants as $tenant)
-                                        @if (!$tenant->tenant)
-                                            <option value="{{$tenant->id}}">{{$tenant->address}}</option>
+                                    @foreach ($boxes as $box)
+                                        @if (!$box->tenant)
+                                            <option value="{{$box->id}}">{{$box->address}}</option>
+                                        @else
+                                            <option selected="selected" value="{{$box->id}}">{{$box->address}}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -88,28 +86,6 @@
                             </td>
                         </tr>
                     </form>
-                    @foreach ($tenants as $tenant)
-                    @if ($tenant->tenant)
-                    <tr>
-                        <td>{{$tenant->tenant->id}}</td>
-                        <td>{{$tenant->tenant->first_name}}</td>
-                        <td>{{$tenant->tenant->last_name}}</td>
-                        <td>{{$tenant->tenant->phone}}</td>
-                        <td>{{$tenant->tenant->email}}</td>
-                        <td>{{$tenant->tenant->address}}</td>
-                        <td>{{$tenant->tenant->bank_account}}</td>
-                        <td><a  href="{{ route('box.edit', $tenant->id) }}" class="links" >{{$tenant->address}}</a> </td>
-                        <td>
-                            <a href="{{ route('tenant.edit', $tenant->tenant->id) }}" class="links" >Modifier</a>
-                            <form action="{{ route('tenant.destroy', [$tenant->tenant->id, $tenant->owner_id]) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button class="links" type="submit">Supprimer</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endif
-                    @endforeach
                 </table>
             </div>
         </div>

@@ -12,7 +12,7 @@ class TenantController extends Controller
     // Create
 
     public function store(Request $request){
-       Tenant::insert([
+       Tenant::updateOrInsert(['email'=>$request->get('email')],[
         'first_name'=>$request->get('first_name'),
         'last_name'=>$request->get('last_name'),
         'phone'=>$request->get('phone'),
@@ -33,20 +33,38 @@ class TenantController extends Controller
 
     // Update
 
-    public function update($owner_id){
-        // $boxes = Box::where('owner_id',$owner_id)->with('tenant')->get();
-        // return view('tenant.list', ['tenants'=>$boxes]);
+    public function update(Request $request, $id,$owner_id){
+        Tenant::find($id)->update([   
+            'first_name'=>$request->get('first_name'),
+            'last_name'=>$request->get('last_name'),
+            'phone'=>$request->get('phone'),
+            'email'=>$request->get('email'),
+            'address'=>$request->get('address'),
+            'bank_account'=>$request->get('bank_account'),
+            'box_id'=>$request->get('box')
+    ]);
+
+
+        return redirect()->route('tenant.show',$owner_id);
     }
 
-    public function edit($owner_id){
-        // $boxes = Box::where('owner_id',$owner_id)->with('tenant')->get();
-        // return view('tenant.list', ['tenants'=>$boxes]);
+    public function edit($id){
+        $tenant=Tenant::find($id);
+        $box=Box::find($tenant->box_id);        
+        $boxes = Box::where('owner_id',$box->owner_id)->with('tenant')->get();
+        return view('tenant.edit', [
+            'tenant'=>$tenant, 
+            'tenant_box'=>$box,
+            'boxes'=>$boxes
+        ]);
     }
 
     // Delete
 
-    public function destroy($owner_id){
-        // $boxes = Box::where('owner_id',$owner_id)->with('tenant')->get();
-        // return view('tenant.list', ['tenants'=>$boxes]);
+    public function destroy(Request $request, $id, $owner_id)
+    {
+        Tenant::destroy($id);
+
+        return redirect()->route('tenant.show',$owner_id);
     }
 }
