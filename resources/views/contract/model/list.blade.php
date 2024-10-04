@@ -9,7 +9,7 @@ td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
-
+}
 input{
     width: 100%;
 }
@@ -109,7 +109,7 @@ ul {
                         <td>{{$model->name}}</td>
                         <td class="contract">{{$model->content}}</td>
                         <td>
-                            <a class="links" href="{{ route('contrats.show', ['contract', $model->id]) }}">Générer un contrat</a>
+                            <a class="links" href="{{ route('contrats.create', ['contract', $model->id, Auth::user()->id]) }}">Générer un contrat</a>
                             <a href="{{ route('model-contracts.edit', $model->id) }}" class="links" >Modifier</a>
                             <form action="{{ route('model-contracts.destroy', [$model->id, $model->landlord_id]) }}" method="POST">
                                 @csrf

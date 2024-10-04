@@ -70,7 +70,7 @@
                             <td></td>
                         @endif
                         <td>
-                            <a class="links" href="{{ route('contrats.show', ['box', $box->id]) }}">Générer un contrat</a>
+                            <a class="links" href="{{ route('contrats.create', ['type'=>'box', 'id'=>$box->id,'logged_id'=>$box->owner_id]) }}">Générer un contrat</a>
                             <a class="links" href="{{ route('box.edit', $box->id) }}">Modifier</a>
                             <form action="{{ route('box.destroy', [$box->id, $box->owner_id]) }}" method="POST">
                                 @csrf

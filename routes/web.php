@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BoxController;
+use App\Http\Controllers\ContratController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModelContractController;
 use App\Http\Controllers\ProfileController;
@@ -35,7 +36,7 @@ Route::group(['prefix' => 'contracts'], function () {
         Route::delete('{id}/{owner_id}', [ModelContractController::class, 'destroy'])->name('model-contracts.destroy');
         Route::put('{id}/{owner_id}', [ModelContractController::class, 'update'])->name('model-contracts.update');
     });
-    Route::get('{type}/{id}', function(){dd('test');})->middleware(['auth', 'verified'])->name('contrats.show');
+    Route::get('{type}/{id}/{logged_id}', [ContratController::class, 'create'])->middleware(['auth', 'verified'])->name('contrats.create');
 });
 
 Route::middleware('auth')->group(function () {
