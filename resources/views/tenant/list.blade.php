@@ -11,10 +11,20 @@
     padding: 8px;
   }
 
+  input{
+    width: 100%
+  }
    select{
     text-overflow: ellipsis;
   }
 
+  .links{
+    color : rgb(27, 98, 229);
+  }
+  
+  .links:hover{
+    color : rgb(0, 0, 0);
+  }
 .box_address{
     max-width: 219px;
 }
@@ -32,6 +42,8 @@
                 <table>
                     <tr>
                         <th>#</th>
+                        <th>Prénom</th>
+                        <th>Nom</th>
                         <th>Tel</th>
                         <th>Mail</th>
                         <th>Adresse</th>
@@ -43,6 +55,12 @@
                         @csrf
                         <tr>
                             <td></td>
+                            <td>
+                                <input type="text" name="first_name" required>
+                            </td>
+                            <td>
+                                <input type="text" name="last_name" required>
+                            </td>
                             <td>
                                 <input type="number" name="phone" required>
                             </td>
@@ -58,12 +76,14 @@
                             <td>
                                 <select name="box" class="box_address" required>
                                     @foreach ($tenants as $tenant)
-                                    <option value="{{$tenant->id}}">{{$tenant->address}}</option>
+                                        @if (!$tenant->tenant)
+                                            <option value="{{$tenant->id}}">{{$tenant->address}}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </td>
                             <td>
-                                <input type="submit" value="Enregistrer">
+                                <input class="links" type="submit" value="Enregistrer">
                                 <input type="hidden" name="owner_id" value="{{ Auth::user()->id}}"">
                             </td>
                         </tr>
@@ -72,11 +92,13 @@
                     @if ($tenant->tenant)
                     <tr>
                         <td>{{$tenant->tenant->id}}</td>
+                        <td>{{$tenant->tenant->first_name}}</td>
+                        <td>{{$tenant->tenant->last_name}}</td>
                         <td>{{$tenant->tenant->phone}}</td>
                         <td>{{$tenant->tenant->email}}</td>
                         <td>{{$tenant->tenant->address}}</td>
                         <td>{{$tenant->tenant->bank_account}}</td>
-                        <td>{{$tenant->address}} </td>
+                        <td><a  href="{{ route('box.edit', $tenant->id) }}" class="links" >{{$tenant->address}}</a> </td>
                         <td>
                             {{-- <a href="{{ route('tenant.edit', $tenant->id) }}">Modifier</a> --}}
                         {{-- <form action="{{ route('tenant.destroy', [$tenant->id, $tenant->owner_id]) }}" method="POST">

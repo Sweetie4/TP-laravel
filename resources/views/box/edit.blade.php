@@ -10,7 +10,13 @@
     text-align: left;
     padding: 8px;
   }
-
+  .links{
+    color : rgb(27, 98, 229);
+  }
+  
+  .links:hover{
+    color : rgb(0, 0, 0);
+  }
 </style>
 <x-app-layout>
     <x-slot name="header">
@@ -28,7 +34,7 @@
                         <th>Photo</th>
                         <th>Adresse</th>
                         <th>Location par mois</th>
-                        <th>Locataire actuel</th>
+                        <th>Locataire</th>
                         <th>Action</th>
                     </tr>
                     <form action="{{ route('box.update',[$box->id, $box->owner_id]) }}" method="POST">
@@ -46,10 +52,21 @@
                                 <input type="number" value="{{$box->price}}" name="price" required>
                             </td>
                             <td>
-                                <input type="text" value="{{$box->tenant_id}}" name="tenant_id">
+                                <select  name="tenant_id">
+                                    <option value=""></option>
+                                    @foreach ($boxes as $tenant) 
+                                        @if ($tenant->tenant)
+                                            @if($box->tenant && $box->tenant->id == $tenant->tenant->id)
+                                                <option selected="selected" value="{{$tenant->tenant->id}}">{{$tenant->tenant->first_name}} {{$tenant->tenant->last_name}}</option>
+                                            @else
+                                                <option value="{{$tenant->tenant->id}}">{{$tenant->tenant->first_name}} {{$tenant->tenant->last_name}}</option>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                </select>
                             </td>
                             <td>
-                                <input type="submit" value="Enregistrer">
+                                <input class="links" type="submit" value="Enregistrer">
                                 <input type="hidden" name="owner_id" value="{{ Auth::user()->id}}"">
                             </td>
                         </tr>
