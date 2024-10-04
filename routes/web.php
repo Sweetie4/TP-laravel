@@ -22,6 +22,16 @@ Route::group(['prefix' => 'tenant'], function () {
     Route::put('{id}/{owner_id}', [TenantController::class, 'update'])->name('tenant.update');
 });
 
+
+
+Route::group(['prefix' => 'contracts'], function () {
+    Route::get('{owner_id}', [TenantController::class, 'show'])->middleware(['auth', 'verified'])->name('contracts.show');
+    Route::get('edit/{id}', [TenantController::class, 'edit'])->middleware(['auth', 'verified'])->name('contracts.edit');
+    Route::post('', [TenantController::class, 'store'])->name('contracts.store');
+    Route::delete('{id}/{owner_id}', [TenantController::class, 'destroy'])->name('contracts.destroy');
+    Route::put('{id}/{owner_id}', [TenantController::class, 'update'])->name('contracts.update');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
