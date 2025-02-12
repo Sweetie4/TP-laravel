@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Box;
 use App\Models\ModelContract;
 use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ContratController extends Controller
@@ -35,13 +36,26 @@ class ContratController extends Controller
     }
 
     public function store(Request $request ){
-        $model = ModelContract::where('id',$request->get('model'))->first();
+        $model = ModelContract::where('id',$request->model)->first();
         $exploded_model = explode("#", $model->content);
-        foreach($array as $key => $value) {
-            if($key%2 == 0) 
-            continue;
+        $reconstructed_model = '';
+        foreach($exploded_model as $text) {
+            if(str_contains($text,'.')) {
+                $parts = explode('.',$text);
+                if ($parts[0] === 'user'){
+                    $user = User::where('id', $request->owner_id)->first();
+                    $text = $user[$parts[1]];
+                } else if ($parts[0]==='tenant'){
+                    $tenant = Tenant::where('id', $request->tenant)->first();
+                    $text = $tenant[$parts[1]];
+                } else if ($parts[0]==='box'){
+                    $box = Box::where('id', $request->box)->first();
+                    $text = $box[$parts[1]];
+                }
+            }
+            $reconstructed_model .= $text;
         }
-        dd('fifsh');
+        dd($reconstructed_model);
         return view('dashboard');
     }
 }
