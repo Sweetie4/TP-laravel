@@ -113,7 +113,7 @@
                             @endif
                         </div>
     
-                        <input class="links" type="submit" value="Enregistrer">
+                        <input class="links" type="submit" value="Génerer et télécharger">
                         <input type="hidden" name="owner_id" value="{{ Auth::user()->id}}"">
                     </form>
                 </div>

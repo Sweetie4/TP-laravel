@@ -7,6 +7,7 @@ use App\Models\Box;
 use App\Models\ModelContract;
 use App\Models\Tenant;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class ContratController extends Controller
@@ -53,9 +54,16 @@ class ContratController extends Controller
                     $text = $box[$parts[1]];
                 }
             }
+            if (str_contains($text,"\n")){
+                $text =str_replace("\n", "<br>", $text);
+            }
             $reconstructed_model .= $text;
         }
-        dd($reconstructed_model);
+        $data =['text'=>$reconstructed_model, 'title'=>$model->name];
+        $pdf = Pdf::loadView('contract.pdf.contract', $data);
+        $title = str_replace(" ", "_", $model->name);
+        return $pdf->download($title."_".$tenant->first_name."_".$tenant->last_name."_".$box->id."_".date('Y-m-d').".pdf");
+
         return view('dashboard');
     }
 }
