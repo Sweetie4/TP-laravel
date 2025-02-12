@@ -71,13 +71,15 @@ class ContratController extends Controller
             'name'=>$file_name,
             'owner_id'=>$user->id,
             'tenant_id'=>$tenant->id,
+            'box_id'=>$box->id,
+            'model_id'=>$model->id,
             'file_path'=>Storage::url($file_name)
         ]);
         return $pdf->download($file_name);
     }
 
     public function show($owner_id){
-        $contracts = Contract::where('owner_id',$owner_id)->get();
+        $contracts = Contract::where('owner_id',$owner_id)->with('tenant','box', 'model')->get();
         return view('contract.list', 
             ['contracts'=>$contracts, 'owner_id'=>$owner_id]
         );
