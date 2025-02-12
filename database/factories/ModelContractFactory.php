@@ -24,8 +24,8 @@ class ModelContractFactory extends Factory
             'content'=>"BAIL POUR ESPACE DE STOCKAGE
             ENTRE LES SOUSSIGNES 
             
-            LE BAILLEUR : M #user.name d'une part.
-            LE LOCATAIRE : M #tenant.first_name #tenant.last_name, demeurant #tenant.address d'autre part.
+            LE BAILLEUR : M #user.name# d'une part.
+            LE LOCATAIRE : M #tenant.first_name# #tenant.last_name#, demeurant #tenant.address# d'autre part.
             
             IL A ETE ARRETE ET CONVENU CE QUI SUIT?
             
@@ -33,7 +33,7 @@ class ModelContractFactory extends Factory
             
             DESIGNATION : Box fermé
             
-            Localisation : #box.address
+            Localisation : #box.address#
             
             Les locaux sont parfaitement connus du preneur, qui déclare les avoir examinés et ne pas demander de description plus déraillée.
             "

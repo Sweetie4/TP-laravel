@@ -60,25 +60,25 @@
                         </div>
                         <div class="form-group">
                             <label>Contenu</label>
-                            <p class="hint">Utiliser # pour utiliser les variables</p>
+                            <p class="hint">Utiliser #objet.attribut# pour utiliser les variables</p>
                             <ul class="hint">
                                 <div>
-                                    <li>#user.name : votre nom</li>
+                                    <li>#user.name# : votre nom</li>
                                 </div>
 
                                 <div>
-                                    <li>#tenant.first_name : Le prénom du locataire</li>
-                                    <li>#tenant.last_name : Le nom du locataire</li>
-                                    <li>#tenant.address : L'adresse du locataire</li>
-                                    <li>#tenant.email : Le mail du locataire</li>
-                                    <li>#tenant.phone : Le téléphone du locataire</li>
-                                    <li>#tenant.bank_account : Le compte bancaire du locataire</li>
+                                    <li>#tenant.first_name# : Le prénom du locataire</li>
+                                    <li>#tenant.last_name# : Le nom du locataire</li>
+                                    <li>#tenant.address# : L'adresse du locataire</li>
+                                    <li>#tenant.email# : Le mail du locataire</li>
+                                    <li>#tenant.phone# : Le téléphone du locataire</li>
+                                    <li>#tenant.bank_account# : Le compte bancaire du locataire</li>
                                 </div>
                                 
                                 <div>
-                                    <li>#box.price : Le prix du box</li>
-                                    <li>#box.img : L'image du box</li>
-                                    <li>#box.address : L'adresse du box</li>
+                                    <li>#box.price# : Le prix du box</li>
+                                    <li>#box.img# : L'image du box</li>
+                                    <li>#box.address# : L'adresse du box</li>
                                 </div>
                             </ul>
                             <textarea name="content" >{{$model->content}}</textarea>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BoxController;
+use App\Http\Controllers\ContratController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModelContractController;
 use App\Http\Controllers\ProfileController;
@@ -27,12 +28,16 @@ Route::group(['prefix' => 'tenant'], function () {
 
 
 
-Route::group(['prefix' => 'model-contracts'], function () {
-    Route::get('{owner_id}', [ModelContractController::class, 'show'])->middleware(['auth', 'verified'])->name('model-contracts.show');
-    Route::get('edit/{id}', [ModelContractController::class, 'edit'])->middleware(['auth', 'verified'])->name('model-contracts.edit');
-    Route::post('', [ModelContractController::class, 'store'])->name('model-contracts.store');
-    Route::delete('{id}/{owner_id}', [ModelContractController::class, 'destroy'])->name('model-contracts.destroy');
-    Route::put('{id}/{owner_id}', [ModelContractController::class, 'update'])->name('model-contracts.update');
+Route::group(['prefix' => 'contracts'], function () {
+    Route::group(['prefix' => 'models'], function () {
+        Route::get('{owner_id}', [ModelContractController::class, 'show'])->middleware(['auth', 'verified'])->name('model-contracts.show');
+        Route::get('edit/{id}', [ModelContractController::class, 'edit'])->middleware(['auth', 'verified'])->name('model-contracts.edit');
+        Route::post('', [ModelContractController::class, 'store'])->name('model-contracts.store');
+        Route::delete('{id}/{owner_id}', [ModelContractController::class, 'destroy'])->name('model-contracts.destroy');
+        Route::put('{id}/{owner_id}', [ModelContractController::class, 'update'])->name('model-contracts.update');
+    });
+    Route::get('{type}/{id}/{logged_id}', [ContratController::class, 'create'])->middleware(['auth', 'verified'])->name('contrats.create');
+    Route::post('', [ContratController::class, 'store'])->middleware(['auth', 'verified'])->name('contracts.store');
 });
 
 Route::middleware('auth')->group(function () {

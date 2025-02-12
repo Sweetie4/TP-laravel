@@ -9,7 +9,7 @@ td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
-
+}
 input{
     width: 100%;
 }
@@ -72,25 +72,25 @@ ul {
                     </div>
                     <div class="form-group">
                         <label>Contenu</label>
-                        <p class="hint">Utiliser # pour utiliser les variables</p>
+                        <p class="hint">Utiliser #objet.attribut# pour utiliser les variables</p>
                         <ul class="hint">
                             <div>
-                                <li>#user.name : votre nom</li>
+                                <li>#user.name# : votre nom</li>
                             </div>
 
                             <div>
-                                <li>#tenant.first_name : Le prénom du locataire</li>
-                                <li>#tenant.last_name : Le nom du locataire</li>
-                                <li>#tenant.address : L'adresse du locataire</li>
-                                <li>#tenant.email : Le mail du locataire</li>
-                                <li>#tenant.phone : Le téléphone du locataire</li>
-                                <li>#tenant.bank_account : Le compte bancaire du locataire</li>
+                                <li>#tenant.first_name# : Le prénom du locataire</li>
+                                <li>#tenant.last_name# : Le nom du locataire</li>
+                                <li>#tenant.address# : L'adresse du locataire</li>
+                                <li>#tenant.email# : Le mail du locataire</li>
+                                <li>#tenant.phone# : Le téléphone du locataire</li>
+                                <li>#tenant.bank_account# : Le compte bancaire du locataire</li>
                             </div>
                             
                             <div>
-                                <li>#box.price : Le prix du box</li>
-                                <li>#box.img : L'image du box</li>
-                                <li>#box.address : L'adresse du box</li>
+                                <li>#box.price# : Le prix du box</li>
+                                <li>#box.img# : L'image du box</li>
+                                <li>#box.address# : L'adresse du box</li>
                             </div>
                         </ul>
                         <textarea name="content" ></textarea>
@@ -109,6 +109,7 @@ ul {
                         <td>{{$model->name}}</td>
                         <td class="contract">{{$model->content}}</td>
                         <td>
+                            <a class="links" href="{{ route('contrats.create', ['contract', $model->id, Auth::user()->id]) }}">Générer un contrat</a>
                             <a href="{{ route('model-contracts.edit', $model->id) }}" class="links" >Modifier</a>
                             <form action="{{ route('model-contracts.destroy', [$model->id, $model->landlord_id]) }}" method="POST">
                                 @csrf
