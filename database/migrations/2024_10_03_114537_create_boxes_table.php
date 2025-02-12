@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('boxes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('owner_id');
-            $table->foreignId('tenant_id');
+            $table->foreignId('tenant_id')->nullable();
             $table->string('img_url');
             $table->string('address');
             $table->integer('price');
