@@ -19,6 +19,9 @@ class Contract extends Model
        'tenant_id',
        'box_id',
        'model_id',
+       'monthly_price',
+       'start_date',
+       'end_date',
        'file_path'
     ];
 

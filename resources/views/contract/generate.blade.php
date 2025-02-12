@@ -68,6 +68,14 @@
                         <h2>Créer un modèle</h2>
                         @csrf
                         <div class="form-group">
+                            <label>Date de début</label>
+                            <input type="date" name="start_date">
+                        </div>
+                        <div class="form-group">
+                            <label>Date de fin</label>
+                            <input type="date" name="end_date">
+                        </div>
+                        <div class="form-group">
                             @if ($box[0])
                                 <select name="box">
                                     @foreach($box as $b)
