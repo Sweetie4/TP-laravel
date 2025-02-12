@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModelContractController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TenantController;
+use App\Models\Contract;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -36,8 +37,11 @@ Route::group(['prefix' => 'contracts'], function () {
         Route::delete('{id}/{owner_id}', [ModelContractController::class, 'destroy'])->name('model-contracts.destroy');
         Route::put('{id}/{owner_id}', [ModelContractController::class, 'update'])->name('model-contracts.update');
     });
+    Route::get('{owner_id}', [ContratController::class, 'show'])->middleware(['auth', 'verified'])->name('contracts.show');
     Route::get('{type}/{id}/{logged_id}', [ContratController::class, 'create'])->middleware(['auth', 'verified'])->name('contrats.create');
     Route::post('', [ContratController::class, 'store'])->middleware(['auth', 'verified'])->name('contracts.store');
+    Route::delete('{id}/{owner_id}', [ContratController::class, 'destroy'])->name('contracts.destroy');
+    Route::get('/download/{file_name}', [ContratController::class, 'download'])->name('contract.download');
 });
 
 Route::middleware('auth')->group(function () {

@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Box;
+use App\Models\Contract;
 use App\Models\ModelContract;
 use App\Models\Tenant;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ContratController extends Controller
 {
@@ -62,8 +64,35 @@ class ContratController extends Controller
         $data =['text'=>$reconstructed_model, 'title'=>$model->name];
         $pdf = Pdf::loadView('contract.pdf.contract', $data);
         $title = str_replace(" ", "_", $model->name);
-        return $pdf->download($title."_".$tenant->first_name."_".$tenant->last_name."_".$box->id."_".date('Y-m-d').".pdf");
+        $file_name = $title."_".$tenant->first_name."_".$tenant->last_name."_".$box->id."_".date('Y-m-d').".pdf";
+        $content = $pdf->download()->getOriginalContent();
+        Storage::disk('public')->put($file_name, $content);
+        Contract::insert([
+            'name'=>$file_name,
+            'owner_id'=>$user->id,
+            'tenant_id'=>$tenant->id,
+            'file_path'=>Storage::url($file_name)
+        ]);
+        return $pdf->download($file_name);
+    }
 
-        return view('dashboard');
+    public function show($owner_id){
+        $contracts = Contract::where('owner_id',$owner_id)->get();
+        return view('contract.list', 
+            ['contracts'=>$contracts, 'owner_id'=>$owner_id]
+        );
+    }
+
+        // Delete
+
+        public function destroy(Request $request, $id, $owner_id)
+        {
+            Contract::destroy($id);
+    
+            return redirect()->route('contracts.show',$owner_id);
+        }
+    
+    public function download($file_name){
+        return Storage::disk('public')->download($file_name);
     }
 }
