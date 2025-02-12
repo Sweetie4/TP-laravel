@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('owner_id');
             $table->foreignId('tenant_id');
+            $table->foreignId('box_id');
+            $table->foreignId('model_id');
             $table->string('file_path');
             $table->timestamps();
         });
