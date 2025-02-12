@@ -15,7 +15,7 @@ class Tenant extends Model
     protected $table = 'tenants';
 
     protected $fillable=[
-        'box_id',
+        'user_id',
         'first_name',
         'last_name',
         'phone',
@@ -24,8 +24,8 @@ class Tenant extends Model
         'bank_account'
     ];
 
-    public function box(): HasOne{
-        return $this->hasOne(Box::class);
+    public function user(): HasOne{
+        return $this->hasOne(User::class);
     }
 
     public function contracts():HasMany{

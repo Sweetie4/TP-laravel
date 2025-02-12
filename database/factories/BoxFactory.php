@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,8 +19,10 @@ class BoxFactory extends Factory
     public function definition(): array
     {
         $userIDs = User::pluck('id');
+        $tenantIDs = Tenant::pluck('id');
         return [
             'owner_id'=> fake()->randomElement($userIDs),
+            'tenant_id'=> fake()->randomElement($tenantIDs),
             'img_url'=>'https://gilbert.paris/wp-content/uploads/2021/04/location-box-stockage-.jpg',
             'address'=>fake()->address(),
             'price'=> 120

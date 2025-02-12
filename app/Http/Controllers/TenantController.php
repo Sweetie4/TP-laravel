@@ -12,15 +12,17 @@ class TenantController extends Controller
     // Create
 
     public function store(Request $request){
-       Tenant::updateOrInsert(['email'=>$request->get('email')],[
+    Tenant::updateOrInsert(['email'=>$request->get('email')],[
         'first_name'=>$request->get('first_name'),
         'last_name'=>$request->get('last_name'),
         'phone'=>$request->get('phone'),
         'email'=>$request->get('email'),
         'address'=>$request->get('address'),
         'bank_account'=>$request->get('bank_account'),
-        'box_id'=>$request->get('box')
+        'user_id'=>$request->get('owner_id')
     ]);
+
+        Box::where('id',$request->get('box'))->update(['tenant_id'=>Tenant::where('email',$request->get('email'))->first()->id]);
         return  redirect()->route('tenant.show',$request->get('owner_id'));
     }
 
