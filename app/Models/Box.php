@@ -17,14 +17,15 @@ class Box extends Model
 
     protected $fillable =[
         'owner_id',
+        'tenant_id',
         'address',
         'img_url',
         'price'
     ];
 
     
-    public function tenant(): HasOne{
-        return $this->hasOne(Tenant::class);
+    public function tenant(): BelongsTo{
+        return $this->belongsTo(Tenant::class);
     }
 
     public function user(): BelongsTo

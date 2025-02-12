@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Box;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,9 +17,9 @@ class TenantFactory extends Factory
      */
     public function definition(): array
     {
-        $boxIDs = Box::pluck('id');
+        $userIDs = User::pluck('id');
         return [
-            'box_id' => fake()->randomElement($boxIDs),
+            'user_id' => fake()->randomElement($userIDs),
             'first_name'=> fake()->firstName(),
             'last_name' => fake()->lastName(),
             'phone' =>fake()->phoneNumber(),
