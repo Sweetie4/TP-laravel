@@ -89,7 +89,10 @@ class ContratController extends Controller
             'tenant_id'=>$tenant->id,
             'box_id'=>$box->id,
             'model_id'=>$model->id,
-            'file_path'=>Storage::url($file_name)
+            'monthly_price'=>$box->price,
+            'start_date'=>date_create($request->start_date),
+            'end_date'=>date_create($request->end_date),
+            'file_path'=>Storage::url($file_name),
         ]);
         return $pdf->download($file_name);
     }
