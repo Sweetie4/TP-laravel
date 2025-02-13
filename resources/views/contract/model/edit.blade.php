@@ -64,6 +64,10 @@
                             <ul class="hint">
                                 <div>
                                     <li>#user.name# : votre nom</li>
+                                    <li>#date.start# : la date de début</li>
+                                    <li>#date.end# : la date de fin</li>
+                                    <li>#price.total# : le montant total</li>
+                                    <li>#price.month# : le montant par mois</li>
                                 </div>
 
                                 <div>

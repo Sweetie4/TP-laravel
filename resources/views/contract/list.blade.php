@@ -68,14 +68,20 @@ ul {
                         <th>Nom</th>
                         <th>Locataire</th>
                         <th>Box</th>
+                        <th>Prix par mois</th>
+                        <th>Début</th>
+                        <th>Fin</th>
                         <th>Type de contrat</th>
                         <th>Action</th>
                     </tr>
                     @foreach ($contracts as $contract)
                     <tr>
                         <td>{{$contract->name}}</td>
-                        <td>{{$contract->tenant->first_name}}</td>
+                        <td>{{$contract->tenant->first_name}} {{$contract->tenant->last_name}}</td>
                         <td>{{$contract->box->address}}</td>
+                        <td>{{$contract->monthly_price}} €</td>
+                        <td>{{$contract->start_date}}</td>
+                        <td>{{$contract->end_date}}</td>
                         <td>{{$contract->model->name}}</td>
                         <td>
                             <a class="links" href="{{ $contract->file_path }}" target="_blank">Voir</a>

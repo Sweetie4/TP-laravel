@@ -36,6 +36,12 @@
                     </x-nav-link>
                 </div>
 
+                
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('payments.show', ['owner_id' =>  Auth::user()->id, 'month' =>  date('m-Y')])" :active="request()->routeIs('payments.show')">
+                        {{ __('Gestion des paiements') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->

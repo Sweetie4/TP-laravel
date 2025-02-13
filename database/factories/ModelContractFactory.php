@@ -27,7 +27,7 @@ class ModelContractFactory extends Factory
             LE BAILLEUR : M #user.name# d'une part.
             LE LOCATAIRE : M #tenant.first_name# #tenant.last_name#, demeurant #tenant.address# d'autre part.
             
-            IL A ETE ARRETE ET CONVENU CE QUI SUIT?
+            IL A ETE ARRETE ET CONVENU CE QUI SUIT:
             
             Le Bailleur louant les locaux et équipements ci après, désignés, au Locataire qui les accepte aux conditions suivantes.
             
@@ -36,6 +36,15 @@ class ModelContractFactory extends Factory
             Localisation : #box.address#
             
             Les locaux sont parfaitement connus du preneur, qui déclare les avoir examinés et ne pas demander de description plus déraillée.
+            
+            DUREE : 
+            
+            Date de prise effective du bail : #date.start#
+            Date de fin effective du bail : #date.end#
+            
+            MONTANT : 
+            
+            #tenant.first_name# #tenant.last_name# doit s'acquitter de #price.month# € par mois,  soit #price.total# € au total.
             "
 
         ];

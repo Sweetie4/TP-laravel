@@ -42,6 +42,7 @@ class ContratController extends Controller
         $model = ModelContract::where('id',$request->model)->first();
         $exploded_model = explode("#", $model->content);
         $reconstructed_model = '';
+        $box = Box::where('id', $request->box)->first();
         foreach($exploded_model as $text) {
             if(str_contains($text,'.')) {
                 $parts = explode('.',$text);
@@ -52,8 +53,23 @@ class ContratController extends Controller
                     $tenant = Tenant::where('id', $request->tenant)->first();
                     $text = $tenant[$parts[1]];
                 } else if ($parts[0]==='box'){
-                    $box = Box::where('id', $request->box)->first();
                     $text = $box[$parts[1]];
+                } else if ($parts[0]==='date'){
+                    if ($parts[1]==='start'){
+                        $text = $request->start_date;
+                    } else if ($parts[1]==='end') {
+                        $text = $request->end_date;
+                    }
+                } else if ($parts[0]==='price'){
+                    $start_date = date_create($request->start_date);
+                    $end_date = date_create($request->end_date);
+                    $interval = date_diff($start_date, $end_date);
+                    $interval = $interval->format('%y') * 12 + $interval->format('%m');
+                    if ($parts[1]==='month') {
+                        $text = $box->price;
+                    } else if ($parts[1]==='total'){
+                        $text= $box->price*$interval;
+                    }
                 }
             }
             if (str_contains($text,"\n")){
@@ -67,14 +83,18 @@ class ContratController extends Controller
         $file_name = $title."_".$tenant->first_name."_".$tenant->last_name."_".$box->id."_".date('Y-m-d').".pdf";
         $content = $pdf->download()->getOriginalContent();
         Storage::disk('public')->put($file_name, $content);
-        Contract::insert([
+        $contract = Contract::insertGetId([
             'name'=>$file_name,
             'owner_id'=>$user->id,
             'tenant_id'=>$tenant->id,
             'box_id'=>$box->id,
             'model_id'=>$model->id,
-            'file_path'=>Storage::url($file_name)
+            'monthly_price'=>$box->price,
+            'start_date'=>date_create($request->start_date),
+            'end_date'=>date_create($request->end_date),
+            'file_path'=>Storage::url($file_name),
         ]);
+        PaymentController::store($contract);
         return $pdf->download($file_name);
     }
 

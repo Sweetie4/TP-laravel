@@ -18,6 +18,9 @@ return new class extends Migration
             $table->foreignId('tenant_id');
             $table->foreignId('box_id');
             $table->foreignId('model_id');
+            $table->integer('monthly_price');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->string('file_path');
             $table->timestamps();
         });
