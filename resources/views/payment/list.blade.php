@@ -81,7 +81,7 @@
                     <table>
                         <tr>
                             <td class="month"><a class="nav-month-btn links"  href="{{route('payments.show', [$owner_id, date("m-Y", strtotime("-1 month", DateTime::createFromFormat("m-Y", $month)->getTimestamp()))])}}"><</a></button></td>
-                            <td colspan="4" class="month">{{$month}}</td>
+                            <td colspan="5" class="month">{{$month}}</td>
                             <td class="month"><a class="nav-month-btn links" href="{{route('payments.show', [$owner_id, date("m-Y", strtotime("+1 month", DateTime::createFromFormat("m-Y", $month)->getTimestamp()))])}}">></a></td>
                         </tr>
                         <tr>
@@ -118,7 +118,7 @@
                         @endforeach
                         @else 
                         <tr>
-                            <td colspan="6" class="month"> Aucune donnée à afficher</td>
+                            <td colspan="7" class="month"> Aucune donnée à afficher</td>
                         </tr>
                         @endif
                     </table>
