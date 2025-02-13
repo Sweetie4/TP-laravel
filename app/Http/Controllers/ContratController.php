@@ -83,7 +83,7 @@ class ContratController extends Controller
         $file_name = $title."_".$tenant->first_name."_".$tenant->last_name."_".$box->id."_".date('Y-m-d').".pdf";
         $content = $pdf->download()->getOriginalContent();
         Storage::disk('public')->put($file_name, $content);
-        Contract::insert([
+        $contract = Contract::insertGetId([
             'name'=>$file_name,
             'owner_id'=>$user->id,
             'tenant_id'=>$tenant->id,
@@ -94,6 +94,7 @@ class ContratController extends Controller
             'end_date'=>date_create($request->end_date),
             'file_path'=>Storage::url($file_name),
         ]);
+        PaymentController::store($contract);
         return $pdf->download($file_name);
     }
 

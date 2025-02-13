@@ -4,6 +4,7 @@ use App\Http\Controllers\BoxController;
 use App\Http\Controllers\ContratController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModelContractController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TenantController;
 use App\Models\Contract;
@@ -43,6 +44,11 @@ Route::group(['prefix' => 'contracts'], function () {
     Route::delete('{id}/{owner_id}', [ContratController::class, 'destroy'])->middleware(['auth', 'verified'])->name('contracts.destroy');
     Route::get('/download/{file_name}', [ContratController::class, 'download'])->middleware(['auth', 'verified'])->name('contract.download');
 });
+
+Route::group(['prefix' => 'payments'], function() {
+    Route::get('{owner_id}/{month}', [PaymentController::class, 'show'])->middleware(['auth', 'verified'])->name('payments.show');
+    Route::put('{payment_id}', [PaymentController::class, 'update'])->middleware(['auth', 'verified'])->name('payments.update');
+}); 
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->middleware(['auth', 'verified'])->name('profile.edit');
