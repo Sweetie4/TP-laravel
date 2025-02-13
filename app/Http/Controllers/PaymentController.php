@@ -56,6 +56,13 @@ class PaymentController extends Controller
         );
     }
 
+    /**
+     * Update payment
+     * 
+     * Update payment's satuts by adding a payment date
+     * @param int $payment_id  - payment to update
+     * @return  (($to is null ? \Illuminate\Routing\Redirector : \Illuminate\Http\RedirectResponse))
+     */
     public function update($payment_id){
         $payment = Payment::where('id', $payment_id)->with('contract.owner')->first();
         $payment->update(['payment_date'=>date('Y-m-d')]);
