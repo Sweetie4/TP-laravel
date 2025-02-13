@@ -14,17 +14,17 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 Route::group(['prefix' => 'box'], function () {
     Route::get('{owner_id}', [BoxController::class, 'show'])->middleware(['auth', 'verified'])->name('box.show');
     Route::get('edit/{id}', [BoxController::class, 'edit'])->middleware(['auth', 'verified'])->name('box.edit');
-    Route::post('', [BoxController::class, 'store'])->name('box.store');
-    Route::delete('{id}/{owner_id}', [BoxController::class, 'destroy'])->name('box.destroy');
-    Route::put('{id}/{owner_id}', [BoxController::class, 'update'])->name('box.update');
+    Route::post('', [BoxController::class, 'store'])->middleware(['auth', 'verified'])->name('box.store');
+    Route::delete('{id}/{owner_id}', [BoxController::class, 'destroy'])->middleware(['auth', 'verified'])->name('box.destroy');
+    Route::put('{id}/{owner_id}', [BoxController::class, 'update'])->middleware(['auth', 'verified'])->name('box.update');
 });
 
 Route::group(['prefix' => 'tenant'], function () {
     Route::get('{owner_id}', [TenantController::class, 'show'])->middleware(['auth', 'verified'])->name('tenant.show');
     Route::get('edit/{id}', [TenantController::class, 'edit'])->middleware(['auth', 'verified'])->name('tenant.edit');
-    Route::post('', [TenantController::class, 'store'])->name('tenant.store');
-    Route::delete('{id}/{owner_id}', [TenantController::class, 'destroy'])->name('tenant.destroy');
-    Route::put('{id}/{owner_id}', [TenantController::class, 'update'])->name('tenant.update');
+    Route::post('', [TenantController::class, 'store'])->middleware(['auth', 'verified'])->name('tenant.store');
+    Route::delete('{id}/{owner_id}', [TenantController::class, 'destroy'])->middleware(['auth', 'verified'])->name('tenant.destroy');
+    Route::put('{id}/{owner_id}', [TenantController::class, 'update'])->middleware(['auth', 'verified'])->name('tenant.update');
 });
 
 
@@ -33,21 +33,21 @@ Route::group(['prefix' => 'contracts'], function () {
     Route::group(['prefix' => 'models'], function () {
         Route::get('{owner_id}', [ModelContractController::class, 'show'])->middleware(['auth', 'verified'])->name('model-contracts.show');
         Route::get('edit/{id}', [ModelContractController::class, 'edit'])->middleware(['auth', 'verified'])->name('model-contracts.edit');
-        Route::post('', [ModelContractController::class, 'store'])->name('model-contracts.store');
-        Route::delete('{id}/{owner_id}', [ModelContractController::class, 'destroy'])->name('model-contracts.destroy');
-        Route::put('{id}/{owner_id}', [ModelContractController::class, 'update'])->name('model-contracts.update');
+        Route::post('', [ModelContractController::class, 'store'])->middleware(['auth', 'verified'])->name('model-contracts.store');
+        Route::delete('{id}/{owner_id}', [ModelContractController::class, 'destroy'])->middleware(['auth', 'verified'])->name('model-contracts.destroy');
+        Route::put('{id}/{owner_id}', [ModelContractController::class, 'update'])->middleware(['auth', 'verified'])->name('model-contracts.update');
     });
     Route::get('{owner_id}', [ContratController::class, 'show'])->middleware(['auth', 'verified'])->name('contracts.show');
     Route::get('{type}/{id}/{logged_id}', [ContratController::class, 'create'])->middleware(['auth', 'verified'])->name('contrats.create');
     Route::post('', [ContratController::class, 'store'])->middleware(['auth', 'verified'])->name('contracts.store');
-    Route::delete('{id}/{owner_id}', [ContratController::class, 'destroy'])->name('contracts.destroy');
-    Route::get('/download/{file_name}', [ContratController::class, 'download'])->name('contract.download');
+    Route::delete('{id}/{owner_id}', [ContratController::class, 'destroy'])->middleware(['auth', 'verified'])->name('contracts.destroy');
+    Route::get('/download/{file_name}', [ContratController::class, 'download'])->middleware(['auth', 'verified'])->name('contract.download');
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])->middleware(['auth', 'verified'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->middleware(['auth', 'verified'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->middleware(['auth', 'verified'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';
