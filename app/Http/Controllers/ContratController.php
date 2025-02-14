@@ -27,8 +27,8 @@ class ContratController extends Controller
                 return view('contract.generate',['box'=>$box, 'tenant'=>$boxes,'model'=>$models]); 
             }
         } else if($type=="tenant"){
-            $tenant = Tenant::where('id',$id)->first();
-            $box = Box::where('id',$tenant->box_id)->first();
+            $tenant = Tenant::where('id',$id)->with('box')->first();
+            $box = $tenant->box;
             return view('contract.generate',['box'=>$box, 'tenant'=>$tenant,'model'=>$models]); 
         }else if($type=="contract"){
             $model = ModelContract::find($id);
@@ -64,7 +64,7 @@ class ContratController extends Controller
                     $start_date = date_create($request->start_date);
                     $end_date = date_create($request->end_date);
                     $interval = date_diff($start_date, $end_date);
-                    $interval = $interval->format('%y') * 12 + $interval->format('%m');
+                    $interval = $interval->format('%y') * 12 + $interval->format('%m') +($interval->format('%d')>0?1:0) ;
                     if ($parts[1]==='month') {
                         $text = $box->price;
                     } else if ($parts[1]==='total'){

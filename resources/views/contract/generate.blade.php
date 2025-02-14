@@ -76,7 +76,7 @@
                             <input type="date" name="end_date">
                         </div>
                         <div class="form-group">
-                            @if ($box[0])
+                            @if (isset($box[0]))
                                 <select name="box">
                                     @foreach($box as $b)
                                     <option value="{{$b->id}}">{{$b->address}}</option>
