@@ -45,8 +45,15 @@
 
                 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('taxes.show', ['user_id' =>  Auth::user()->id, 'month' =>  date('m-Y')])" :active="request()->routeIs('taxes.show')">
+                    <x-nav-link :href="route('taxes.show', ['user_id' =>  Auth::user()->id])" :active="request()->routeIs('taxes.show')">
                         {{ __('Impôts') }}
+                    </x-nav-link>
+                </div>
+
+                
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('bills.show', ['owner_id' =>  Auth::user()->id, 'month' =>  date('m-Y')])" :active="request()->routeIs('bills.show')">
+                        {{ __('Factures') }}
                     </x-nav-link>
                 </div>
             </div>

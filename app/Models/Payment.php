@@ -16,7 +16,8 @@ class Payment extends Model
     protected $fillable=[
         'contract_id',
         'due_date',
-        'payment_date'
+        'payment_date',
+        'file_path'
     ];
     
 

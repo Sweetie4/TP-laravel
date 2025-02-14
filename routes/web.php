@@ -51,6 +51,11 @@ Route::group(['prefix' => 'payments'], function() {
     Route::put('{payment_id}', [PaymentController::class, 'update'])->middleware(['auth', 'verified'])->name('payments.update');
 }); 
 
+Route::group(['prefix' => 'bills'], function() {
+    Route::get('download/{file_name}', [PaymentController::class, 'download'])->middleware(['auth', 'verified'])->name('bills.download');
+    Route::get('{owner_id}/{month}', [PaymentController::class, 'showBills'])->middleware(['auth', 'verified'])->name('bills.show');
+}); 
+
 Route::group(['prefix'=>'taxes'], function() {
     Route::get('{user_id}', [TaxesController::class, 'show'])->middleware(['auth', 'verified'])->name('taxes.show');
     Route::post('', [TaxesController::class, 'generate'])->middleware(['auth', 'verified'])->name('taxes.calculate');
