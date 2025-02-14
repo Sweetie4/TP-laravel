@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModelContractController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaxesController;
 use App\Http\Controllers\TenantController;
 use App\Models\Contract;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +50,11 @@ Route::group(['prefix' => 'payments'], function() {
     Route::get('{owner_id}/{month}', [PaymentController::class, 'show'])->middleware(['auth', 'verified'])->name('payments.show');
     Route::put('{payment_id}', [PaymentController::class, 'update'])->middleware(['auth', 'verified'])->name('payments.update');
 }); 
+
+Route::group(['prefix'=>'taxes'], function() {
+    Route::get('{user_id}', [TaxesController::class, 'show'])->middleware(['auth', 'verified'])->name('taxes.show');
+    Route::post('', [TaxesController::class, 'generate'])->middleware(['auth', 'verified'])->name('taxes.calculate');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->middleware(['auth', 'verified'])->name('profile.edit');
