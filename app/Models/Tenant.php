@@ -31,4 +31,8 @@ class Tenant extends Model
     public function contracts():HasMany{
         return $this->hasMany(Contract::class);
     }
+
+    public function box(): HasMany{
+        return $this->hasMany(Box::class);
+    }
 }

@@ -50,12 +50,14 @@ class PaymentController extends Controller
     }
 
     public function show($owner_id,$month){
-        $first_date = date("Y-m-01 00:00:00", strtotime(DateTime::createFromFormat("m-Y", $month)->format('Y-m-d')));
-        $last_date = date("Y-m-t 00:00:00", strtotime(DateTime::createFromFormat("m-Y", $month)->format('Y-m-d')));
+        // Rent is due at the beginning of the NEXT month
+        // So we take payment for the previous month
+        $finish_after = date("Y-m-01 00:00:00", strtotime("-1 month",strtotime(DateTime::createFromFormat("m-Y", $month)->format('Y-m-d')))); //Take contract that include the previous month
+        $start_before = date("Y-m-t 00:00:00", strtotime(DateTime::createFromFormat("m-Y", $month)->format('Y-m-d'))); //Exclude contracts that start after this month
         $contracts = Contract::where([
                 ['owner_id',$owner_id],
-                ['start_date','<=', $last_date],
-                ['end_date','>=', $first_date],
+                ['start_date','<=', $start_before],
+                ['end_date','>=', $finish_after],
             ])
             ->with('payments','tenant','box', 'model')
             ->get();
@@ -63,7 +65,7 @@ class PaymentController extends Controller
         foreach ($contracts as $contract){
             $contract_payments = $contract->payments;
             foreach ($contract_payments as $payment){
-                if ($month == date("m-Y",strtotime($payment->due_date))){
+                if ($month == date("m-Y",strtotime($payment->due_date))||$month == date("m-Y",strtotime("+1 month",strtotime($payment->due_date)))){
                     $payments[] = ['payment'=>$payment, 'contract'=>$contract];
                 }
 
@@ -75,12 +77,14 @@ class PaymentController extends Controller
     }
 
     public function showBills($owner_id,$month){
-        $first_date = date("Y-m-01 00:00:00", strtotime(DateTime::createFromFormat("m-Y", $month)->format('Y-m-d')));
-        $last_date = date("Y-m-t 00:00:00", strtotime(DateTime::createFromFormat("m-Y", $month)->format('Y-m-d')));
+        // Rent is due at the beginning of the NEXT month
+        // So we take payment for the previous month
+        $finish_after = date("Y-m-01 00:00:00", strtotime("-1 month",strtotime(DateTime::createFromFormat("m-Y", $month)->format('Y-m-d')))); //Take contract that include the previous month
+        $start_before = date("Y-m-t 00:00:00", strtotime(DateTime::createFromFormat("m-Y", $month)->format('Y-m-d'))); //Exclude contracts that start after this month
         $contracts = Contract::where([
                 ['owner_id',$owner_id],
-                ['start_date','<=', $last_date],
-                ['end_date','>=', $first_date],
+                ['start_date','<=', $start_before],
+                ['end_date','>=', $finish_after],
             ])
             ->with('payments','tenant','box', 'model')
             ->get();
@@ -88,7 +92,7 @@ class PaymentController extends Controller
         foreach ($contracts as $contract){
             $contract_payments = $contract->payments;
             foreach ($contract_payments as $payment){
-                if ($month == date("m-Y",strtotime($payment->due_date))){
+                if ($month == date("m-Y",strtotime($payment->due_date))||$month == date("m-Y",strtotime("+1 month",strtotime($payment->due_date)))){
                     $payments[] = ['payment'=>$payment, 'contract'=>$contract];
                 }
 
