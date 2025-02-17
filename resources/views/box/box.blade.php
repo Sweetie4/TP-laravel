@@ -32,6 +32,7 @@
                     <tr>
                         <th>#</th>
                         <th>Photo</th>
+                        <th>Nom</th>
                         <th>Adresse</th>
                         <th>Location par mois</th>
                         <th>Locataire actuel</th>
@@ -43,6 +44,9 @@
                             <td></td>
                             <td>
                                 <input type="url" name="img_url">
+                            </td>
+                            <td>
+                                <input type="text" name="name" required>
                             </td>
                             <td>
                                 <input type="text" name="address" required>
@@ -62,6 +66,7 @@
                     <tr>
                         <td>{{$box->id}}</td>
                         <td><img src="{{$box->img_url}}" width="80px" height="80px"> </td>
+                        <td>{{$box->name}}</td>
                         <td>{{$box->address}}</td>
                         <td>{{$box->price}}€ </td>
                         @if ($box->tenant)

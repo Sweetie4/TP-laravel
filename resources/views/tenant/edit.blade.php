@@ -73,9 +73,9 @@ input{
                                 <select name="box" class="box_address" required>
                                     @foreach ($boxes as $box)
                                         @if (!$box->tenant)
-                                            <option value="{{$box->id}}">{{$box->address}}</option>
+                                            <option value="{{$box->id}}">{{$box->name}} au {{$box->address}}</option>
                                         @else
-                                            <option selected="selected" value="{{$box->id}}">{{$box->address}}</option>
+                                            <option selected="selected" value="{{$box->id}}">{{$box->name}} au{{$box->address}}</option>
                                         @endif
                                     @endforeach
                                 </select>

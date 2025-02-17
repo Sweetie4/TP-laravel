@@ -14,40 +14,36 @@ use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
-    public static function store($contract_id){
-        $contract = Contract::where('id',$contract_id)->with('tenant','box', 'owner')->first();
-        $start_date = $contract->start_date; 
-        $end_date = $contract->end_date; 
-        $interval = $start_date->diff($end_date);
-        $nb_month = $interval->y * 12 + $interval->m;
-        for ($i = 1; $i<$nb_month+1; $i++){
-            if (!$start_date instanceof \Carbon\Carbon) {
-                $start_date = \Carbon\Carbon::parse($start_date);
-            }
-            $start_date->addMonth();
-            $start_month = $start_date->copy()->firstOfMonth()->toDateString();
-            $end_month = $start_date->copy()->lastOfMonth()->toDateString();
-            $file_name = "facture_".$contract->tenant->first_name."_".$contract->tenant->last_name."_".$contract->box->id."_".date('Y-m-d').".pdf";
-            $data =[
-                'tenant' =>  $contract->tenant,
-                'user' => $contract->owner,
-                'box' => $contract->box, 
-                'dates'=>[ 
-                    $start_month,  
-                    $end_month
-                ],
-                'title'=>explode('.pdf',$file_name)[0],
-            ];
-            $pdf = Pdf::loadView('bill.pdf.bill', $data);
-            $content = $pdf->download()->getOriginalContent();
-            Storage::disk('public')->put($file_name, $content);
-            Payment::create([
-                'contract_id' => $contract_id,
-                'due_date' => $start_date->toDateString(),
-                'file_path'=>Storage::url($file_name),
-            ]);
-            
-        }
+    public static function store(Request $request){
+        $contract = Contract::where('id',$request->contract)->with('tenant','box', 'owner')->first();
+        $due_date = \Carbon\Carbon::parse($request->month);
+        $month = date('m-Y', strtotime($request->month));
+        $start_month = $due_date->copy()->firstOfMonth()->toDateString();
+        $end_month = $due_date->copy()->lastOfMonth()->toDateString();
+        $file_name = "facture_".$contract->tenant->first_name."_".$contract->tenant->last_name."_".$contract->box->id."_".date('Y-m-d').".pdf";
+        $data =[
+            'tenant' =>  $contract->tenant,
+            'user' => $contract->owner,
+            'box' => $contract->box, 
+            'contract' => $contract, 
+            'dates'=>[ 
+                $start_month,  
+                $end_month
+            ],
+            'title'=>explode('.pdf',$file_name)[0],
+        ];
+        $pdf = Pdf::loadView('bill.pdf.bill', $data);
+        $content = $pdf->download()->getOriginalContent();
+        Storage::disk('public')->put($file_name, $content);
+        
+        Payment::create([
+            'contract_id' => $request->contract,
+            'due_date' => $due_date->toDateString(),
+            'payment_montant'=>$contract->monthly_price,
+            'file_path'=>Storage::url($file_name),
+        ]); 
+
+        return redirect()->route('bills.show',[$request->owner_id, $month]);
     }
 
     public function show($owner_id,$month){
@@ -100,7 +96,7 @@ class PaymentController extends Controller
             }
         }
         return view('bill.list', 
-            ['payments'=>$payments, 'owner_id'=>$owner_id, 'month'=>$month]
+            ['payments'=>$payments,'contracts'=>$contracts, 'owner_id'=>$owner_id, 'month'=>$month]
         );
     }
 
@@ -115,6 +111,13 @@ class PaymentController extends Controller
         $payment = Payment::where('id', $payment_id)->with('contract.owner')->first();
         $payment->update(['payment_date'=>date('Y-m-d')]);
         return redirect()->route('payments.show', [$payment->contract->owner->id,date("m-Y",strtotime($payment->due_date))]);
+    }
+
+    public function destroy($id, $owner_id, $month) {
+        Payment::destroy($id);
+
+        return redirect()->route('bills.show',[$owner_id, $month]);
+        
     }
 
     public function download($file_name){
@@ -132,7 +135,7 @@ class PaymentController extends Controller
             ->get();
         foreach ($payments as $payment){
             if ($payment->contract->owner_id === Auth::user()->id){
-                $content .= $payment->contract->tenant->last_name.";".$payment->contract->tenant->first_name.";".$payment->contract->tenant->email.";".$payment->contract->tenant->phone.";".str_replace("\n",'',$payment->contract->tenant->address).";".str_replace("\n",'',$payment->contract->box->address).";".$payment->contract->box->price."€;".$payment->due_date.";".$payment->payment_date.";\n";   
+                $content .= $payment->contract->tenant->last_name.";".$payment->contract->tenant->first_name.";".$payment->contract->tenant->email.";".$payment->contract->tenant->phone.";".str_replace("\n",'',$payment->contract->tenant->address).";".$payment->contract->box->name."au".str_replace("\n",'',$payment->contract->box->address).";".$payment->contract->monthly_price."€;".$payment->due_date.";".$payment->payment_date.";\n";   
             }
         }
         fwrite($payment_file, $content);

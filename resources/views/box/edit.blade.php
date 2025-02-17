@@ -32,6 +32,7 @@
                     <tr>
                         <th>#</th>
                         <th>Photo</th>
+                        <th>Nom</th>
                         <th>Adresse</th>
                         <th>Location par mois</th>
                         <th>Locataire</th>
@@ -44,6 +45,9 @@
                             <td></td>
                             <td>
                                 <input type="url" value="{{$box->img_url}}" name="img_url">
+                            </td>
+                            <td>
+                                <input type="text" value="{{$box->name}}" name="name" required>
                             </td>
                             <td>
                                 <textarea type="text"  name="address" required>{{$box->address}}</textarea>

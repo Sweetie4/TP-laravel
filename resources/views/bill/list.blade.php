@@ -78,6 +78,24 @@
         <div class="py-12">
             <div class=" mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <form action="{{ route('payments.store') }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label>Contrat</label>
+                            <select name="contract">
+                                @foreach ($contracts as $contract)
+                                <option value="{{$contract->id}}">{{$contract->model->name}} - {{$contract->tenant->first_name}} {{$contract->tenant->last_name}} - Box {{$contract->box->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Mois</label>
+                            <input  name="month" type="date">
+                        </div>
+
+                        <input class="links" type="submit" value="Générer une facture"/>
+                        <input type="hidden" name="owner_id" value="{{ Auth::user()->id}}"">
+                    </form>
                     <table>
                         <tr>
                             <td class="month"><a class="nav-month-btn links"  href="{{route('bills.show', [$owner_id, date("m-Y", strtotime("-1 month", DateTime::createFromFormat("m-Y", $month)->getTimestamp()))])}}"><</a></button></td>
@@ -95,12 +113,17 @@
                         @foreach ($payments as $payment)
                         <tr>
                             <td>{{$payment['contract']->tenant->first_name}} {{$payment['contract']->tenant->last_name}}</td>
-                            <td>{{$payment['contract']->box->address}}</td>
-                            <td>{{$payment['contract']->box->price}} €</td>
+                            <td>{{$payment['contract']->box->name}} au {{$payment['contract']->box->address}}</td>
+                            <td>{{$payment['contract']->monthly_price}} €</td>
                             <td>{{explode('/',$payment['payment']->file_path)[2]}}</td>
                             <td>
                                 <a class="links" href="{{ $payment['payment']->file_path }}" target="_blank">Voir</a> <br>
                                 <a href="{{ route('bills.download', [explode('/',$payment['payment']->file_path)[2]]) }}" class="links" >Télécharger</a><br>
+                                <form action="{{ route('bills.destroy', [$payment['payment']->id, Auth::user()->id, $month]) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="links" type="submit">Supprimer</button>
+                                </form> 
                             </td>
                         </tr>
                         @endforeach

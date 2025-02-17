@@ -10,3 +10,7 @@ Une fois la commande lancée, vous pouver vous connecter à l'application via ce
 |        Email        | Mot de passe |  
 |---------------------|--------------|
 |  knockknock@mail.fr |  whosthere   | 
+|    cesame@mai.fr    |   ouvretoi   |
+
+
+Une version est également disponible [ici](http://mahora.grolleau.angers.mds-project.fr/dashboard)
