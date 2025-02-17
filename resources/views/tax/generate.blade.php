@@ -80,6 +80,15 @@
                         @endif
                         <p>Vous dever remplir <strong>{{$result['sum_to_inform']}} €</strong> à la <strong>{{$result['case']}}</strong>. <br>
                             Vous serez imposé sur <strong>{{$result['sum_taxed']}} €</strong>, soit <strong>{{$result['taxes']}} €</strong> de prévelés. </p>
+
+                        
+                    <form action="{{ route('taxes.export') }}" method="POST">
+                        
+                        <input type="hidden" name="result" value="{{ json_encode($result)}}">
+                        @csrf
+                        @method('POST')
+                        <input  class="links" type="submit" value="Exporter en pdf">
+                    </form>
                     </div>
                     @endif 
                     <form action="{{ route('taxes.calculate') }}" method="POST">

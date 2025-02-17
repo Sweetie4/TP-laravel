@@ -59,6 +59,7 @@ Route::group(['prefix' => 'bills'], function() {
 Route::group(['prefix'=>'taxes'], function() {
     Route::get('{user_id}', [TaxesController::class, 'show'])->middleware(['auth', 'verified'])->name('taxes.show');
     Route::post('', [TaxesController::class, 'generate'])->middleware(['auth', 'verified'])->name('taxes.calculate');
+    Route::post('/export', [TaxesController::class, 'export'])->middleware(['auth', 'verified'])->name('taxes.export');
 });
 
 Route::middleware('auth')->group(function () {
