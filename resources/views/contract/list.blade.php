@@ -78,7 +78,7 @@ ul {
                     <tr>
                         <td>{{$contract->name}}</td>
                         <td>{{$contract->tenant->first_name}} {{$contract->tenant->last_name}}</td>
-                        <td>{{$contract->box->address}}</td>
+                        <td>{{$contract->box->name}} au {{$contract->box->address}}</td>
                         <td>{{$contract->monthly_price}} €</td>
                         <td>{{$contract->start_date}}</td>
                         <td>{{$contract->end_date}}</td>

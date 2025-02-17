@@ -19,7 +19,7 @@ class BoxController extends Controller
 
     public function store(Request $request)
     {
-        Box::insert([ 'owner_id'=> $request->get('owner_id'),'price'=> $request->get('price'), 'address'=>$request->get('address'), 'img_url'=>$request->get('img_url')]);
+        Box::insert([ 'owner_id'=> $request->get('owner_id'),'price'=> $request->get('price'), 'name'=>$request->get('name'),'address'=>$request->get('address'), 'img_url'=>$request->get('img_url')]);
         return redirect()->route('box.show',$request->get('owner_id'));
     }
 
@@ -31,7 +31,7 @@ class BoxController extends Controller
     }
     public function update(Request $request, $id, $owner_id)
     {
-        Box::find($id)->update(['price'=> $request->get('price'), 'address'=>$request->get('address'), 'img_url'=>$request->get('img_url')]);
+        Box::find($id)->update(['price'=> $request->get('price'), 'name'=>$request->get('name'), 'address'=>$request->get('address'), 'img_url'=>$request->get('img_url')]);
         if ($request->get('tenant_id')){
             Tenant::find($request->get('tenant_id'))->update(['box_id'=>$id]);
         }

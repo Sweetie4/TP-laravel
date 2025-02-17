@@ -43,6 +43,9 @@ class ContratController extends Controller
         $exploded_model = explode("#", $model->content);
         $reconstructed_model = '';
         $box = Box::where('id', $request->box)->first();
+        if ($box->tenant_id != $request->tenant){
+            $box->update(['tenant_id' => $request->tenant]);
+        }
         foreach($exploded_model as $text) {
             if(str_contains($text,'.')) {
                 $parts = explode('.',$text);
@@ -66,9 +69,9 @@ class ContratController extends Controller
                     $interval = date_diff($start_date, $end_date);
                     $interval = $interval->format('%y') * 12 + $interval->format('%m') +($interval->format('%d')>0?1:0) ;
                     if ($parts[1]==='month') {
-                        $text = $box->price;
+                        $text = $request->price;
                     } else if ($parts[1]==='total'){
-                        $text= $box->price*$interval;
+                        $text= $request->price*$interval;
                     }
                 }
             }
@@ -80,7 +83,7 @@ class ContratController extends Controller
         $data =['text'=>$reconstructed_model, 'title'=>$model->name];
         $pdf = Pdf::loadView('contract.pdf.contract', $data);
         $title = str_replace(" ", "_", $model->name);
-        $file_name = $title."_".$tenant->first_name."_".$tenant->last_name."_".$box->id."_".date('Y-m-d').".pdf";
+        $file_name = $title."_".$tenant->first_name."_".$tenant->last_name."_".$box->name."_".date('Y-m-d').".pdf";
         $content = $pdf->download()->getOriginalContent();
         Storage::disk('public')->put($file_name, $content);
         $contract = Contract::insertGetId([
@@ -89,12 +92,11 @@ class ContratController extends Controller
             'tenant_id'=>$tenant->id,
             'box_id'=>$box->id,
             'model_id'=>$model->id,
-            'monthly_price'=>$box->price,
+            'monthly_price'=>$request->price,
             'start_date'=>date_create($request->start_date),
             'end_date'=>date_create($request->end_date),
             'file_path'=>Storage::url($file_name),
         ]);
-        PaymentController::store($contract);
         return $pdf->download($file_name);
     }
 
