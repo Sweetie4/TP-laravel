@@ -66,7 +66,9 @@
         border: 1px rgb(0,0,0) solid;
     }
 
-    
+    .export{    
+        margin: 10px
+    }
     
     </style>
     <x-app-layout>
@@ -78,6 +80,9 @@
         <div class="py-12">
             <div class=" mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="export">
+                        <a class="links" href="{{route('payments.export', [$month])}}" >Export en CSV</a>
+                    </div>
                     <table>
                         <tr>
                             <td class="month"><a class="nav-month-btn links"  href="{{route('payments.show', [$owner_id, date("m-Y", strtotime("-1 month", DateTime::createFromFormat("m-Y", $month)->getTimestamp()))])}}"><</a></button></td>

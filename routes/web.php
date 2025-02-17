@@ -48,6 +48,7 @@ Route::group(['prefix' => 'contracts'], function () {
 });
 
 Route::group(['prefix' => 'payments'], function() {
+    Route::get('export/{month}', [PaymentController::class, 'export'])->middleware(['auth', 'verified'])->name('payments.export');
     Route::get('{owner_id}/{month}', [PaymentController::class, 'show'])->middleware(['auth', 'verified'])->name('payments.show');
     Route::put('{payment_id}', [PaymentController::class, 'update'])->middleware(['auth', 'verified'])->name('payments.update');
 }); 

@@ -9,6 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
@@ -116,8 +117,36 @@ class PaymentController extends Controller
         return redirect()->route('payments.show', [$payment->contract->owner->id,date("m-Y",strtotime($payment->due_date))]);
     }
 
-        public function download($file_name){
+    public function download($file_name){
+        return Storage::disk('public')->download($file_name);
+    }
 
-            return Storage::disk('public')->download($file_name);
+    public function export($month){
+        $filename = "Paiements_$month.csv";
+        $payment_file = fopen("php://output", "w");
+        $content = "Nom;Prénom;Email;Téléphone;Adresse;Box; Montant; Dû le; Payé le;\n";
+        $payments = Payment::where('payment_date', '!=', null)
+            ->whereMonth('due_date',explode('-',$month)[0])
+            ->whereYear('due_date',explode('-',$month)[1])
+            ->with('contract.tenant','contract.box')
+            ->get();
+        foreach ($payments as $payment){
+            if ($payment->contract->owner_id === Auth::user()->id){
+                $content .= $payment->contract->tenant->last_name.";".$payment->contract->tenant->first_name.";".$payment->contract->tenant->email.";".$payment->contract->tenant->phone.";".str_replace("\n",'',$payment->contract->tenant->address).";".str_replace("\n",'',$payment->contract->box->address).";".$payment->contract->box->price."€;".$payment->due_date.";".$payment->payment_date.";\n";   
+            }
         }
+        fwrite($payment_file, $content);
+        fclose($payment_file);
+        $now = gmdate("D, d M Y H:i:s");
+    header("Expires: Tue, 03 Jul 2001 06:00:00 GMT");
+    header("Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate");
+    header("Last-Modified: {$now} GMT");
+
+    header("Content-Type: application/force-download");
+    header("Content-Type: application/octet-stream");
+    header("Content-Type: application/download");
+
+    header("Content-Disposition: attachment;filename={$filename}");
+    header("Content-Transfer-Encoding: binary");
+    }
 }
