@@ -10,8 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class TenantController extends Controller
 {
-    // Create
 
+
+    /**
+     * Create a new tenant
+     * @param Request $request new tenant's data
+     */
     public function store(Request $request){
     Tenant::updateOrInsert(['email'=>$request->get('email')],[
         'first_name'=>$request->get('first_name'),
@@ -27,15 +31,21 @@ class TenantController extends Controller
         return  redirect()->route('tenant.show',$request->get('owner_id'));
     }
 
-    // Read
-
+    /**
+     * List all tenants
+     * @param int $owner_id authenticad user's id
+     */
     public function show($owner_id){
         $boxes = Box::where('owner_id',$owner_id)->with('tenant')->get();
         return view('tenant.list', ['tenants'=>$boxes]);
     }
 
-    // Update
-
+    /**
+     * Update a tenant
+     * @param Request $request updated data for tenant
+     * @param int $id tenant's id
+     * @param int $owner_id authenticated user's id
+     */
     public function update(Request $request, $id,$owner_id){
         Tenant::find($id)->update([   
             'first_name'=>$request->get('first_name'),
@@ -46,11 +56,13 @@ class TenantController extends Controller
             'bank_account'=>$request->get('bank_account'),
             'box_id'=>$request->get('box')
     ]);
-
-
         return redirect()->route('tenant.show',$owner_id);
     }
 
+    /**
+     * Show form to edit a tenant
+     * @param int $id tenant's id
+     */
     public function edit($id){
         $tenant=Tenant::find($id);
         $box=Box::find($tenant->box_id);        
@@ -62,8 +74,12 @@ class TenantController extends Controller
         ]);
     }
 
-    // Delete
-
+    /**
+     * delete a tenant
+     * @param Request $request
+     * @param int $id deleted tenant's id
+     * @param int $owner_id authenticated user's id
+     */
     public function destroy(Request $request, $id, $owner_id)
     {
         Tenant::destroy($id);
@@ -71,6 +87,10 @@ class TenantController extends Controller
         return redirect()->route('tenant.show',$owner_id);
     }
 
+    /**
+     * Export all tenant's to csv
+     * 
+     */
     public function export(){
         $filename = "locataires_".date('Y-m-d').".csv";
         $tenant_file = fopen("php://output", "w");
