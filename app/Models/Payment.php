@@ -17,6 +17,7 @@ class Payment extends Model
         'contract_id',
         'due_date',
         'payment_date',
+        'payment_montant',
         'file_path'
     ];
     

@@ -18,6 +18,7 @@ class Box extends Model
     protected $fillable =[
         'owner_id',
         'tenant_id',
+        'name',
         'address',
         'img_url',
         'price'

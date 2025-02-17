@@ -14,11 +14,18 @@ use Illuminate\Support\Facades\Storage;
 
 class ContratController extends Controller
 {
-    // Create
 
+    /**
+     * Show form to create a contract
+     * @param string $type where do the generate demand comes from
+     * @param int $id id corresponding to the type (tenant, box, contract_model)
+     * @param int $logged_id authenticad user's id
+     */
     public function create($type, $id,$logged_id){
         $boxes = Box::where('owner_id',$logged_id)->with('tenant')->get();
         $models = ModelContract::where('landlord_id',$logged_id)->get();
+
+        // If generate contract demand came from the boxes' page
         if($type=="box"){
             $box=Box::where('id',$id)->with('tenant')->first();
             if ($box->tenant){
@@ -26,10 +33,14 @@ class ContratController extends Controller
             } else {
                 return view('contract.generate',['box'=>$box, 'tenant'=>$boxes,'model'=>$models]); 
             }
+            
+        // If generate contract demand came from the tenants' page
         } else if($type=="tenant"){
             $tenant = Tenant::where('id',$id)->with('box')->first();
             $box = $tenant->box;
             return view('contract.generate',['box'=>$box, 'tenant'=>$tenant,'model'=>$models]); 
+            
+        // If generate contract demand came from the contract models' page
         }else if($type=="contract"){
             $model = ModelContract::find($id);
             return view('contract.generate',['box'=>$boxes, 'tenant'=>$boxes,'model'=>$model]); 
@@ -38,6 +49,10 @@ class ContratController extends Controller
         }
     }
 
+    /**
+     * Create a new contract
+     * @param Request $request data for the new contract
+     */
     public function store(Request $request ){
         $model = ModelContract::where('id',$request->model)->first();
         $exploded_model = explode("#", $model->content);
@@ -46,6 +61,8 @@ class ContratController extends Controller
         if ($box->tenant_id != $request->tenant){
             $box->update(['tenant_id' => $request->tenant]);
         }
+
+        // discriminate between text to change and not in model contract
         foreach($exploded_model as $text) {
             if(str_contains($text,'.')) {
                 $parts = explode('.',$text);
@@ -86,7 +103,7 @@ class ContratController extends Controller
         $file_name = $title."_".$tenant->first_name."_".$tenant->last_name."_".$box->name."_".date('Y-m-d').".pdf";
         $content = $pdf->download()->getOriginalContent();
         Storage::disk('public')->put($file_name, $content);
-        $contract = Contract::insertGetId([
+        Contract::insertGetId([
             'name'=>$file_name,
             'owner_id'=>$user->id,
             'tenant_id'=>$tenant->id,
@@ -100,22 +117,32 @@ class ContratController extends Controller
         return $pdf->download($file_name);
     }
 
+    /**
+     * Show all contracts
+     * @param int $owner_id authenticated user's id
+     */
     public function show($owner_id){
         $contracts = Contract::where('owner_id',$owner_id)->with('tenant','box', 'model')->get();
         return view('contract.list', 
             ['contracts'=>$contracts, 'owner_id'=>$owner_id]
         );
     }
-
-        // Delete
-
-        public function destroy(Request $request, $id, $owner_id)
-        {
-            Contract::destroy($id);
     
-            return redirect()->route('contracts.show',$owner_id);
-        }
+    /**
+     * Delete a contract
+     * @param Request $request 
+     * @param int $id deleted contract's id
+     * @param int $owner_id authenticated_user's id
+     */
+    public function destroy(Request $request, $id, $owner_id){
+        Contract::destroy($id);
+        return redirect()->route('contracts.show',$owner_id);
+    }
     
+    /**
+     * Download a contract
+     * @param string $file_name filename of the contract downloaded
+     */
     public function download($file_name){
         return Storage::disk('public')->download($file_name);
     }
