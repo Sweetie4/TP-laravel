@@ -22,6 +22,7 @@ Route::group(['prefix' => 'box'], function () {
 });
 
 Route::group(['prefix' => 'tenant'], function () {
+    Route::get('/export', [TenantController::class, 'export'])->middleware(['auth', 'verified'])->name('tenant.export');
     Route::get('{owner_id}', [TenantController::class, 'show'])->middleware(['auth', 'verified'])->name('tenant.show');
     Route::get('edit/{id}', [TenantController::class, 'edit'])->middleware(['auth', 'verified'])->name('tenant.edit');
     Route::post('', [TenantController::class, 'store'])->middleware(['auth', 'verified'])->name('tenant.store');

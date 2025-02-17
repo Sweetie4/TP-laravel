@@ -28,6 +28,10 @@
 .box_address{
     max-width: 219px;
 }
+
+.export{
+    margin: 10px
+}
 </style>
 <x-app-layout>
     <x-slot name="header">
@@ -38,7 +42,9 @@
     <div class="py-12">
         <div class=" mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                
+                <div class="export">
+                    <a class="links" href="{{route('tenant.export')}}" >Export en CSV</a>
+                </div>
                 <table>
                     <tr>
                         <th>#</th>
