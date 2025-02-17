@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
+    /**
+     * Create a new bill and generate it's pdf
+     * @param Request $request data of the new bill
+     */
     public static function store(Request $request){
         $contract = Contract::where('id',$request->contract)->with('tenant','box', 'owner')->first();
         $due_date = \Carbon\Carbon::parse($request->month);
@@ -46,6 +50,11 @@ class PaymentController extends Controller
         return redirect()->route('bills.show',[$request->owner_id, $month]);
     }
 
+    /**
+     * List all due payment by month
+     * @param int $owner_id autheticad user's id
+     * @param string $month wanted month
+     */
     public function show($owner_id,$month){
         // Rent is due at the beginning of the NEXT month
         // So we take payment for the previous month
@@ -73,6 +82,11 @@ class PaymentController extends Controller
         );
     }
 
+    /**
+     * Show bills per month
+     * @param int $owner_id autheticad user's id
+     * @param string $month wanted month
+     */
     public function showBills($owner_id,$month){
         // Rent is due at the beginning of the NEXT month
         // So we take payment for the previous month
@@ -113,6 +127,12 @@ class PaymentController extends Controller
         return redirect()->route('payments.show', [$payment->contract->owner->id,date("m-Y",strtotime($payment->due_date))]);
     }
 
+    /**
+     * Delete a bill
+     * @param int $id deleted bill' id
+     * @param int $owner_id autheticad user's id
+     * @param string $month wanted month shown after delete
+     */
     public function destroy($id, $owner_id, $month) {
         Payment::destroy($id);
 
@@ -120,10 +140,18 @@ class PaymentController extends Controller
         
     }
 
+    /**
+     * Download bill
+     * @param string $file_name file to download
+     */
     public function download($file_name){
         return Storage::disk('public')->download($file_name);
     }
 
+    /**
+     * Export all payments of the month
+     * @param string $month month wanted
+     */
     public function export($month){
         $filename = "Paiements_$month.csv";
         $payment_file = fopen("php://output", "w");

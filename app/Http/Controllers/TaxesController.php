@@ -10,11 +10,20 @@ use Illuminate\Http\Request;
 
 class TaxesController extends Controller
 {
+
+    /**
+     * Form to choose the system of taxes
+     * @param int $user_id authenticated user's id 
+     */
     public function show($user_id){
         $result = session('result');
         return view('tax.generate', ['result'=>$result]);
     }
 
+    /**
+     * Calculate infos for taxes
+     * @param Request $request infos needed for the calcul
+     */
     public function generate(Request $request){
         $system= $request->system;
         $year = Carbon::now()->year;
@@ -24,6 +33,8 @@ class TaxesController extends Controller
             ->with('box')
             ->get();
         $total_revenue = 0;
+
+        // Determine how many month during the year the contract was effective
         foreach ($contracts as $contract){
             if (
                 ($contract->start_date->year < $year && $contract->end_date->year > $year) ||
@@ -62,6 +73,10 @@ class TaxesController extends Controller
         return redirect()->route('taxes.show', [$request->owner_id])->with('result',$result);
     }
 
+    /**
+     * Export calcul result to pdf
+     * @param Request $requets calcul's results
+     */
     public function export(Request $request){
         $year = Carbon::now()->year;
         $data = [
