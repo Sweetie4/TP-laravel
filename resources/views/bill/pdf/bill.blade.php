@@ -34,7 +34,7 @@ table {
         <div>
             <h1>AVIS D'ÉCHÉANCE</h1>
             <p>Mandat : {{$user->name}}</p>
-            <p>Box : {{$box->address}}</p>
+            <p>Box : {{$box->name}} au {{$box->address}}</p>
         </div>
         <div>
             <p>Le {{$dates[0]}}</p>
@@ -53,11 +53,11 @@ table {
         </tr>
         <tr>
             <td>Période du {{$dates[0]}} au {{$dates[1]}}</td>
-            <td>{{$box->price}} €</td>
+            <td>{{$contract->monthly_price}} €</td>
         </tr>
         <tr>
             <td>Total à régler</td>
-            <td>{{$box->price}} €</td>
+            <td>{{$contract->monthly_price}} €</td>
         </tr>
     </table>
 </body>

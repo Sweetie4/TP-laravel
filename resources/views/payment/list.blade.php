@@ -103,8 +103,8 @@
                         <tr>
                             <td>{{$payment['payment']->payment_date?'Oui':'Non'}}</td>
                             <td>{{$payment['contract']->tenant->first_name}} {{$payment['contract']->tenant->last_name}}</td>
-                            <td>{{$payment['contract']->box->address}}</td>
-                            <td>{{$payment['contract']->box->price}} €</td>
+                            <td>{{$payment['contract']->box->name}} au {{$payment['contract']->box->address}}</td>
+                            <td>{{$payment['contract']->monthly_price}} €</td>
                             <td>{{$payment['payment']->payment_date}}</td>
                             <td>{{$payment['contract']->name}}</td>
                             <td>

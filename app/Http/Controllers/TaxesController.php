@@ -31,15 +31,15 @@ class TaxesController extends Controller
                 ($contract->end_date->month === 12 && $contract->end_date->year === $year && $contract->start_date->year < $year)
             ){ 
                 // Case all month of the year are in contract
-                $total_revenue += $contract->box->price *12;
+                $total_revenue += $contract->monthly_price *12;
             } else if ($contract->start_date->year === $year && $contract->end_date->year > $year) {
                 $nb_month = 13 - $contract->start_date->month;
-                $total_revenue += $contract->box->price *$nb_month;
+                $total_revenue += $contract->monthly_price *$nb_month;
             }else if ($contract->start_date->year < $year && $contract->end_date->year === $year) {
-                $total_revenue += $contract->box->price *$contract->end_date->month;
+                $total_revenue += $contract->monthly_price *$contract->end_date->month;
             }else if ($contract->start_date->year === $year && $contract->end_date->year === $year) {
                 $nb_month = $contract->end_date->month - $contract->start_date->month + 1;
-                $total_revenue += $contract->box->price *$nb_month;
+                $total_revenue += $contract->monthly_price*$nb_month;
             }
         }
         $result = [];

@@ -75,17 +75,27 @@
                             <label>Date de fin</label>
                             <input type="date" name="end_date">
                         </div>
+                        
+                        <div class="form-group">
+                            @if (isset($box[0]))
+                            <label>Montant</label>
+                            <input type="number" name="price">
+                            @else
+                            <label>Montant</label>
+                            <input type="number" name="price" value="{{$box->price}}">
+                            @endif
+                        </div>
                         <div class="form-group">
                             @if (isset($box[0]))
                                 <select name="box">
                                     @foreach($box as $b)
-                                    <option value="{{$b->id}}">{{$b->address}}</option>
+                                    <option value="{{$b->id}}">{{$b->name}} au{{$b->address}}</option>
                                     @endforeach
                                 </select>
                             @else
                                 
                             <select disabled="disabled" >
-                                <option selected="selected" value="{{$box->id}}">{{$box->address}}</option>
+                                <option selected="selected" value="{{$box->id}}">{{$box->name}} au {{$box->address}}</option>
                             </select>
                             <input name="box" type="hidden" value="{{$box->id}}">
                             @endif

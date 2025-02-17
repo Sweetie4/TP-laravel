@@ -50,12 +50,14 @@ Route::group(['prefix' => 'contracts'], function () {
 Route::group(['prefix' => 'payments'], function() {
     Route::get('export/{month}', [PaymentController::class, 'export'])->middleware(['auth', 'verified'])->name('payments.export');
     Route::get('{owner_id}/{month}', [PaymentController::class, 'show'])->middleware(['auth', 'verified'])->name('payments.show');
+    Route::post('', [PaymentController::class, 'store'])->middleware(['auth', 'verified'])->name('payments.store');
     Route::put('{payment_id}', [PaymentController::class, 'update'])->middleware(['auth', 'verified'])->name('payments.update');
 }); 
 
 Route::group(['prefix' => 'bills'], function() {
     Route::get('download/{file_name}', [PaymentController::class, 'download'])->middleware(['auth', 'verified'])->name('bills.download');
     Route::get('{owner_id}/{month}', [PaymentController::class, 'showBills'])->middleware(['auth', 'verified'])->name('bills.show');
+    Route::delete('{id}/{owner_id}/{month}', [PaymentController::class, 'destroy'])->middleware(['auth', 'verified'])->name('bills.destroy');
 }); 
 
 Route::group(['prefix'=>'taxes'], function() {
