@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -59,5 +60,15 @@ class TaxesController extends Controller
         $result['taxes'] = $result['sum_taxed']*0.06;
 
         return redirect()->route('taxes.show', [$request->owner_id])->with('result',$result);
+    }
+
+    public function export(Request $request){
+        $year = Carbon::now()->year;
+        $data = [
+            'title' => "Impôts_$year",
+            'info' =>json_decode($request->result,true)
+        ];
+        $pdf = Pdf::loadView('tax.pdf.tax', $data);
+        return $pdf->download("Impôts_$year.pdf");
     }
 }
