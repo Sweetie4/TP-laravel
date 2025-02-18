@@ -31,9 +31,14 @@ class ModelContractController extends Controller
     public function show($owner_id)
     {
         $models = ModelContract::where('landlord_id', $owner_id)->get();
+        $cleaned_models = [];
+        foreach ($models as $model){
+            $cleaned_content = ModelContractController::jsonToHtml($model);
+            array_push($cleaned_models,[$model, $cleaned_content]);
+        }
         return view(
             'contract.model.list',
-            ['models' => $models]
+            ['models' => $cleaned_models]
         );
     }
 
@@ -52,6 +57,32 @@ class ModelContractController extends Controller
         return redirect()->route('model-contracts.show', $owner_id);
     }
 
+    /**
+     * Transform model to HTML
+     * @param ModelContract $model converted model
+     * @return string
+     */
+    public static function jsonToHtml($model){
+        $cleaned_content ='';
+        foreach (json_decode($model->content) as $line){
+            if ($line->type == 'header'){
+                $cleaned_content .= "<h".$line->data->level.">".$line->data->text."</h".$line->data->level.">";
+            } else if ($line->type == 'paragraph'){
+                $cleaned_content .= "<p>".trim($line->data->text)."</p>";
+            } else if ($line->type == 'table'){
+                $cleaned_content .="<table>";
+                foreach ($line->data->content as $row){
+                    $cleaned_content .="<tr>";
+                    foreach ($row as $cell){
+                        $cleaned_content .="<td>$cell</td>";
+                    }
+                    $cleaned_content .="</td>";
+                }
+                $cleaned_content .="</table>";
+            }
+        } 
+        return $cleaned_content;
+    }
 
     /**
      * View to edit contract models
