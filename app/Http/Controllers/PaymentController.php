@@ -17,17 +17,17 @@ class PaymentController extends Controller
 {
     /**
      * Create a new bill and generate it's pdf
-     * @param Request $request data of the new bill
+     * @param array $request data of the new bill
      */
-    public static function store(Request $request){
-        $month = date('m-Y', strtotime($request->month));
+    public static function store(array $request){
+        $month = date('m-Y', strtotime($request['month']));
         $billService = new BillService();
         try {
             $billService->store($request);
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
-        return redirect()->route('bills.show',[$request->owner_id, $month]);
+        return redirect()->route('bills.show',[$request['owner_id'], $month]);
     }
 
     /**
