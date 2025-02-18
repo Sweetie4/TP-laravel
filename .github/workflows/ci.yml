@@ -18,3 +18,4 @@ jobs:
                 cd /var/www/html/TP-laravel
                 git pull
                 php artisan migrate
+                php artisan config:clear

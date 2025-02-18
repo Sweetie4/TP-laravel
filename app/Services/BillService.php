@@ -13,12 +13,12 @@ use Illuminate\Support\Facades\Storage;
 class BillService {
     /**
      * Create a new bill and generate it's pdf
-     * @param Request $request data of the new bill
+     * @param array $request data of the new bill
      */
-    public static function store(Request $request){
-        $contract = Contract::where('id',$request->contract)->with('tenant','box', 'owner')->first();
-        $due_date = \Carbon\Carbon::parse($request->month);
-        $month = date('m-Y', strtotime($request->month));
+    public static function store(array $request){
+        $contract = Contract::where('id',$request['contract'])->with('tenant','box', 'owner')->first();
+        $due_date = \Carbon\Carbon::parse($request['month']);
+        $month = date('m-Y', strtotime($request['month']));
         $start_month = $due_date->copy()->firstOfMonth()->toDateString();
         $end_month = $due_date->copy()->lastOfMonth()->toDateString();
         $file_name = "facture_".$contract->tenant->first_name."_".$contract->tenant->last_name."_".$contract->box->id."_".date('Y-m-d').".pdf";
@@ -38,7 +38,7 @@ class BillService {
         Storage::disk('public')->put($file_name, $content);
         
         Payment::create([
-            'contract_id' => $request->contract,
+            'contract_id' => $request['contract'],
             'due_date' => $due_date->toDateString(),
             'payment_montant'=>$contract->monthly_price,
             'file_path'=>Storage::url($file_name),

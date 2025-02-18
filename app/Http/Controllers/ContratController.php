@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CreateBill;
 use App\Models\Box;
 use App\Models\Contract;
 use App\Models\ModelContract;
@@ -10,6 +11,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ContratController extends Controller
@@ -61,6 +63,10 @@ class ContratController extends Controller
         if ($box->tenant_id != $request->tenant){
             $box->update(['tenant_id' => $request->tenant]);
         }
+        $start_date = date_create($request->start_date);
+        $end_date = date_create($request->end_date);
+        $interval = date_diff($start_date, $end_date);
+        $interval = $interval->format('%y') * 12 + $interval->format('%m') +($interval->format('%d')>0?1:0) ;
 
         // discriminate between text to change and not in model contract
         foreach($exploded_model as $text) {
@@ -85,10 +91,6 @@ class ContratController extends Controller
                         $text = $request->end_date;
                     }
                 } else if ($parts[0]==='price'){
-                    $start_date = date_create($request->start_date);
-                    $end_date = date_create($request->end_date);
-                    $interval = date_diff($start_date, $end_date);
-                    $interval = $interval->format('%y') * 12 + $interval->format('%m') +($interval->format('%d')>0?1:0) ;
                     if ($parts[1]==='month') {
                         $text = $request->price;
                     } else if ($parts[1]==='total'){
@@ -107,7 +109,7 @@ class ContratController extends Controller
         $file_name = $title."_".$tenant->first_name."_".$tenant->last_name."_".$box->name."_".date('Y-m-d').".pdf";
         $content = $pdf->download()->getOriginalContent();
         Storage::disk('public')->put($file_name, $content);
-        Contract::insertGetId([
+        $contract = Contract::insertGetId([
             'name'=>$file_name,
             'owner_id'=>$user->id,
             'tenant_id'=>$tenant->id,
@@ -118,6 +120,16 @@ class ContratController extends Controller
             'end_date'=>date_create($request->end_date),
             'file_path'=>Storage::url($file_name),
         ]);
+        $update_date = date("d-m-Y",date_timestamp_get($start_date));
+        for ($i = 0; $i<$interval; $i++){
+            $data = [
+                'owner_id'=>Auth::user()->id,
+                'contract'=> $contract,
+                'month'=> $update_date
+            ];
+            dispatch((new CreateBill($data))->onQueue(date("m/Y", strtotime($update_date))));
+            $update_date = date("d-m-Y",strtotime("+1 month",strtotime($update_date)));
+        }
         return $pdf->download($file_name);
     }
 
