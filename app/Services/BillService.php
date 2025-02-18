@@ -66,7 +66,7 @@ class BillService {
         foreach ($contracts as $contract){
             $contract_payments = $contract->payments;
             foreach ($contract_payments as $payment){
-                if ($month == date("m-Y",strtotime($payment->due_date))||$month == date("m-Y",strtotime("+1 month",strtotime($payment->due_date)))){
+                if ($month == date("m-Y",strtotime("+1 month",strtotime($payment->due_date)))){
                     $payments[] = ['payment'=>$payment, 'contract'=>$contract];
                 }
 
@@ -96,7 +96,7 @@ class BillService {
         foreach ($contracts as $contract){
             $contract_payments = $contract->payments;
             foreach ($contract_payments as $payment){
-                if ($month == date("m-Y",strtotime($payment->due_date))||$month == date("m-Y",strtotime("+1 month",strtotime($payment->due_date)))){
+                if ($month == date("m-Y",strtotime("+1 month",strtotime($payment->due_date)))){
                     $payments[] = ['payment'=>$payment, 'contract'=>$contract];
                 }
 
