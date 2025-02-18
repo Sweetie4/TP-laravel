@@ -71,8 +71,7 @@
                                 </div>
 
                                 <div>
-                                    <li>#tenant.first_name# : Le prénom du locataire</li>
-                                    <li>#tenant.last_name# : Le nom du locataire</li>
+                                    <li>#tenant.name# : Le nom du locataire</li>
                                     <li>#tenant.address# : L'adresse du locataire</li>
                                     <li>#tenant.email# : Le mail du locataire</li>
                                     <li>#tenant.phone# : Le téléphone du locataire</li>
@@ -85,12 +84,72 @@
                                     <li>#box.address# : L'adresse du box</li>
                                 </div>
                             </ul>
-                            <textarea name="content" >{{$model->content}}</textarea>
+                            <div id="editorjs"></div>
                         </div>
                         <input class="links" type="submit" value="Enregistrer">
-                        <input type="hidden" name="owner_id" value="{{ Auth::user()->id}}"">
+                        <input type="hidden" name="owner_id" value="{{ Auth::user()->id}}">
+                        <input type="hidden" name="content"></input>
                     </form>
                 </div>
             </div>
         </div>
     </x-app-layout>
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/checklist@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/code@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/table@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/link@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/marker@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/inline-code@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/editorjs-button@latest"></script>
+
+
+<script>
+    const editor = new EditorJS({
+        holder: 'editorjs',
+        data: {
+            blocks: JSON.parse(@json($model->content ?? [])),
+        },
+        tools:{
+            header: {
+                class: Header,
+                inlineToolbar: true
+            },
+            list: {
+                class: EditorjsList,
+                inlineToolbar: true
+            },
+            embed: {
+                class: Embed,
+                inlineToolbar: true
+            },
+            linkTool: {
+                class: LinkTool,
+                inlineToolbar: true
+            },
+            table: {
+                class: Table,
+                inlineToolbar: true
+            }, 
+            simpleImage:{
+                class: SimpleImage,
+                inlineToolbar: true
+            }
+        },
+        onChange: function () {
+            console.log('something changed');
+            editor.save().then((outputData) => {
+                console.log(document.querySelector('input[name=content]'));
+                document.querySelector('input[name=content]').value = JSON.stringify(outputData['blocks'])
+            }).catch((error) => {
+                console.log('Saving failed: ', error)
+            }); 
+        }
+    })
+</script>
