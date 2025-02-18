@@ -55,7 +55,7 @@ class ContratController extends Controller
      */
     public function store(Request $request ){
         $model = ModelContract::where('id',$request->model)->first();
-        $exploded_model = explode("#", $model->content);
+        $exploded_model = explode('#',ModelContractController::jsonToHtml($model));
         $reconstructed_model = '';
         $box = Box::where('id', $request->box)->first();
         if ($box->tenant_id != $request->tenant){
@@ -71,7 +71,11 @@ class ContratController extends Controller
                     $text = $user[$parts[1]];
                 } else if ($parts[0]==='tenant'){
                     $tenant = Tenant::where('id', $request->tenant)->first();
-                    $text = $tenant[$parts[1]];
+                    if ($parts[1]=="name"){
+                        $text = $tenant->first_name." ".$tenant->last_name;
+                    } else {
+                        $text = $tenant[$parts[1]];
+                    }
                 } else if ($parts[0]==='box'){
                     $text = $box[$parts[1]];
                 } else if ($parts[0]==='date'){
