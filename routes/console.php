@@ -18,3 +18,5 @@ Schedule::call(function (){
         }
     }
 })->monthlyOn(1, '8:00');
+
+Schedule::command('queue:work --queue='.Carbon::now()->format('m/Y').' --tries=5 --timeout=30')->monthlyOn(1, '8:00');
